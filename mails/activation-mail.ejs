@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Activation - BBEdits</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 50px 40px;
+            text-align: center;
+            position: relative;
+        }
+        .header::before {
+            content: '🎉';
+            font-size: 60px;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .header h1 {
+            color: #ffffff;
+            font-size: 32px;
+            font-weight: 700;
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .header p {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .content {
+            padding: 50px 40px;
+            background-color: #ffffff;
+        }
+        .greeting {
+            font-size: 20px;
+            color: #1f2937;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .message {
+            color: #4b5563;
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+        .code-container {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            border: 2px dashed #9ca3af;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin: 35px 0;
+        }
+        .code-label {
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+        .activation-code {
+            font-size: 42px;
+            font-weight: 800;
+            color: #667eea;
+            letter-spacing: 8px;
+            font-family: 'Courier New', monospace;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .timer-info {
+            background-color: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+        .timer-info p {
+            color: #92400e;
+            font-size: 14px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .timer-info p::before {
+            content: '⏱️';
+            font-size: 20px;
+        }
+        .info-box {
+            background-color: #f0f9ff;
+            border-left: 4px solid #3b82f6;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 25px;
+        }
+        .info-box p {
+            color: #1e40af;
+            font-size: 14px;
+            margin: 0;
+        }
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #e5e7eb, transparent);
+            margin: 40px 0;
+        }
+        .footer {
+            background-color: #f9fafb;
+            padding: 40px;
+            text-align: center;
+            border-top: 1px solid #e5e7eb;
+        }
+        .footer-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 15px;
+        }
+        .contact-info {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .contact-info a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+        .social-links {
+            margin: 25px 0;
+        }
+        .social-links a {
+            display: inline-block;
+            margin: 0 8px;
+            font-size: 14px;
+            color: #6b7280;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .social-links a:hover {
+            color: #667eea;
+        }
+        .copyright {
+            color: #9ca3af;
+            font-size: 13px;
+            margin-top: 20px;
+        }
+        .features {
+            display: table;
+            width: 100%;
+            margin: 30px 0;
+        }
+        .feature {
+            display: table-row;
+        }
+        .feature-icon {
+            display: table-cell;
+            padding: 10px 15px 10px 0;
+            font-size: 24px;
+            vertical-align: top;
+        }
+        .feature-text {
+            display: table-cell;
+            padding: 10px 0;
+            color: #4b5563;
+            font-size: 15px;
+            vertical-align: top;
+        }
+        @media only screen and (max-width: 600px) {
+            body {
+                padding: 20px 10px;
+            }
+            .header, .content, .footer {
+                padding: 30px 25px;
+            }
+            .header h1 {
+                font-size: 26px;
+            }
+            .activation-code {
+                font-size: 32px;
+                letter-spacing: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Welcome to BBEdits!</h1>
+            <p>Your Learning Journey Starts Here</p>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <p class="greeting">Hello <%= user.name %>,</p>
+            
+            <p class="message">
+                Thank you for joining BBEdits! We're thrilled to have you as part of our learning community. 
+                To get started and unlock access to all our courses, please verify your email address.
+            </p>
+
+            <div class="code-container">
+                <div class="code-label">Your Activation Code</div>
+                <div class="activation-code"><%= activationCode %></div>
+            </div>
+
+            <div class="timer-info">
+                <p><strong>Important:</strong> This code will expire in 5 minutes. Please enter it on the activation page to complete your registration.</p>
+            </div>
+
+            <div class="divider"></div>
+
+            <p class="message" style="margin-bottom: 10px; font-weight: 600; color: #1f2937;">
+                What's Next?
+            </p>
+            
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">📚</div>
+                    <div class="feature-text">Access thousands of courses across various categories</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🎓</div>
+                    <div class="feature-text">Learn from industry experts and certified instructors</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">💡</div>
+                    <div class="feature-text">Track your progress and earn certificates</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">👥</div>
+                    <div class="feature-text">Join a community of passionate learners</div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <p>
+                    <strong>Didn't request this?</strong> If you didn't create a BBEdits account, 
+                    please ignore this email or contact our support team for assistance.
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-title">Need Help?</div>
+            <div class="contact-info">
+                We're here to help! Contact us at<br>
+                📧 <a href="mailto:support@bbedits.in">support@bbedits.in</a><br>
+                📞 <a href="tel:+919515595970">+91 9515595970</a>
+            </div>
+            
+            <div class="social-links">
+                <a href="#">Facebook</a> • 
+                <a href="#">Twitter</a> • 
+                <a href="#">LinkedIn</a> • 
+                <a href="#">Instagram</a>
+            </div>
+            
+            <div class="copyright">
+                © <%= new Date().getFullYear() %> BBEdits. All rights reserved.<br>
+                📍 Vizag, India
+            </div>
+        </div>
+    </div>
+</body>
+</html>

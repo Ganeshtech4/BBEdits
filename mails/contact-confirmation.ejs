@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Received</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #37a39a 0%, #2d8578 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px 10px 0 0;
+            text-align: center;
+            margin: -30px -30px 20px -30px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .checkmark {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+        .content {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .content p {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        .highlight {
+            color: #37a39a;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #37a39a 0%, #2d8578 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="checkmark">✓</div>
+            <h1>Message Received!</h1>
+        </div>
+        
+        <div class="content">
+            <p>Hi <strong><%= name %></strong>,</p>
+            
+            <p>Thank you for reaching out to <span class="highlight">BBEdits</span>!</p>
+            
+            <p>We've successfully received your message and our team will review it shortly. We typically respond within <strong>24-48 hours</strong>.</p>
+            
+            <p>If your inquiry is urgent, please don't hesitate to reach out to us directly at <strong>support@bbedits.in</strong></p>
+            
+            <a href="https://bbedits.in" class="button">Visit Our Website</a>
+        </div>
+        
+        <div class="footer">
+            <p><strong>BBEdits</strong> - Your Learning Partner</p>
+            <p>This is an automated confirmation email. Please do not reply to this message.</p>
+        </div>
+    </div>
+</body>
+</html>
