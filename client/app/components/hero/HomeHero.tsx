@@ -1,10 +1,11 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-import { Suspense } from 'react'
-import LightRays from '../LightRays'
-import { Instagram, Youtube, Send, Mail } from 'lucide-react'
+import Threads from '../Threads'
+import { ArrowRight } from 'lucide-react'
 import Image from 'next/image'
+
+const THREADS_COLOR: [number, number, number] = [0.32, 0.15, 1];
 
 export default function HomeHero() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -30,7 +31,6 @@ export default function HomeHero() {
       if (heroRef.current) {
         const rect = heroRef.current.getBoundingClientRect()
         if (rect.bottom < 0 || rect.top > window.innerHeight) {
-          // Section is out of view, reset
           setMousePosition({ x: 0, y: 0 })
         }
       }
@@ -47,139 +47,89 @@ export default function HomeHero() {
   }, [])
 
   return (
-    <div className="relative w-full min-h-[90vh] bg-white dark:bg-gradient-to-b dark:from-gray-900 dark:to-black overflow-hidden" ref={heroRef}>
-      {/* Light rays in the background */}
-      <div className="absolute inset-0 z-0 pointer-events-none opacity-0 dark:opacity-100">
-        <Suspense fallback={null}>
-          <LightRays
-            raysOrigin="top-center"
-            raysColor="#fff"
-            raysSpeed={1.5}
-            lightSpread={0.8}
-            rayLength={1.2}
-            followMouse={true}
-            mouseInfluence={0.1}
-            noiseAmount={0.1}
-            distortion={0.05}
-            className="w-full h-full"
-          />
-        </Suspense>
+    <div className="relative w-full min-h-screen bg-[#030014] overflow-hidden flex flex-col items-center justify-center pt-48 pb-12" ref={heroRef}>
+      {/* Background Gradients */}
+      <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-purple-900/40 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-full h-[300px] bg-gradient-to-t from-[#030014] to-transparent z-10 pointer-events-none" />
+
+
+      {/* Threads Wave Effect - Full Background */}
+      <div className="absolute inset-0 z-0 pointer-events-none opacity-40">
+        <Threads
+          color={THREADS_COLOR}
+          amplitude={2}
+          distance={0.3}
+          enableMouseInteraction={true}
+        />
       </div>
-      
+
       {/* Main Content */}
-      <div className="relative z-10 w-full min-h-[90vh] flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 py-16 sm:py-12">
-               
-        {/* Hero Content */}
-        <div className="text-center max-w-4xl mx-auto mb-3 sm:mb-6">
-          <h3 className="text-xs sm:text-base md:text-lg text-gray-600 dark:text-gray-400 font-semibold mb-1 sm:mb-2 tracking-wide">
-            Hi, I&apos;m Anil Bangaru
-          </h3>
-          <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-black dark:text-white mb-3 sm:mb-6 leading-tight px-2">
-            Video Editing Mastery<br />
-            Learn from Scratch
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-4 flex flex-col items-center justify-center text-center gap-6">
+
+        {/* Text Content */}
+        <div className="max-w-4xl mx-auto space-y-4">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-white leading-tight">
+            Video Editing <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-violet-600">Mastery.</span>
           </h1>
+          <p className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed">
+            A hub to find, curate, and employ AI agents. Hire custom AI workforces to supercharge your productivity.
+            <br className="hidden md:block" />
+            (Placeholder text - ready for your custom description)
+          </p>
         </div>
 
-        {/* Main Card with 3D Effect */}
-        <div className="relative mb-3 sm:mb-6">
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row items-center gap-4 z-20">
+          {/* Join Waitlist Button */}
+          <button className="relative px-8 py-3 rounded-2xl bg-[#5b21b6] border border-[#7c3aed] text-white font-semibold text-lg hover:bg-[#4c1d95] transition-all duration-300 shadow-[0_0_20px_rgba(124,58,237,0.5)] hover:shadow-[0_0_30px_rgba(124,58,237,0.8)] flex items-center gap-3 group">
+            <span>Join Waitlist</span>
+            <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-colors">
+              <ArrowRight className="w-3.5 h-3.5" />
+            </div>
+          </button>
+
+          {/* Join Community Button */}
+          <button className="px-8 py-3 rounded-2xl border border-white/10 hover:border-white/20 bg-transparent text-white font-semibold text-lg hover:bg-white/5 transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.5)] flex items-center justify-center">
+            Join Community
+          </button>
+        </div>
+
+        {/* Spacer line style */}
+        <div className="w-full max-w-3xl flex items-center gap-4 opacity-50">
+          <div className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-purple-500/50 to-transparent"></div>
+        </div>
+
+        {/* Main Card with 3D Effect - Centered Below */}
+        <div className="relative mt-8 group cursor-pointer perspective-1000">
           <div
             ref={cardRef}
-            className="relative w-52 sm:w-56 md:w-64 lg:w-72 h-64 sm:h-64 md:h-72 lg:h-80
-                      bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-800/50 dark:to-gray-900/50 
-                      rounded-2xl backdrop-blur-sm border border-gray-300 dark:border-white/10 shadow-2xl 
-                      transition-all duration-300 ease-out overflow-visible"
+            className="relative w-[380px] sm:w-[800px] h-[230px] sm:h-[450px]
+                      bg-gradient-to-br from-gray-900/80 to-black/80
+                      rounded-2xl backdrop-blur-sm border border-purple-500/30 shadow-[0_0_50px_rgba(147,51,234,0.15)]
+                      transition-all duration-300 ease-out overflow-hidden"
             style={{
-              transform: `perspective(1000px) rotateY(${mousePosition.x}deg) rotateX(${-mousePosition.y}deg)`,
+              transform: `rotateY(${mousePosition.x * 0.5}deg) rotateX(${-mousePosition.y * 0.5}deg)`,
             }}
           >
             {/* Image Layer */}
-            <div className="absolute inset-0 flex justify-center overflow-visible z-30">
-              <div className="absolute inset-0 -top-8 w-full h-[110%] rounded-2xl overflow-hidden shadow-2xl">
-                <Image
-                  src="/images/anil.webp"
-                  alt="Profile"
-                  fill
-                  sizes="(max-width: 640px) 210px, (max-width: 768px) 224px, (max-width: 1024px) 256px, 288px"
-                  className="object-cover"
-                  priority
-                />
-              </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent rounded-2xl pointer-events-none"></div>
-            </div>
-
-            {/* Floating Icons Layer */}
-            <div className="absolute inset-0 pointer-events-none z-20">
-              {/* Top Left - Photoshop */}
-              <div className="absolute top-0 sm:top-2 -left-8 sm:-left-12 md:-left-10">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 shadow-xl transition-transform duration-300 ease-out
-                            pointer-events-auto hover:scale-110 hover:-rotate-6">
-                  <Image
-                    src="/images/Adobe_After_Effects_CC_icon.png"
-                    alt="Photoshop"
-                    width={50}
-                    height={50}
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-              </div>
-
-              {/* Top Right - DaVinci Resolve */}
-              <div className="absolute top-0 sm:top-2 -right-6 sm:-right-10 md:-right-8">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 shadow-xl transition-transform duration-300 ease-out
-                            pointer-events-auto hover:scale-110 hover:rotate-6">
-                  <Image
-                    src="/images/DaVinci_Resolve_logo.png"
-                    alt="DaVinci Resolve"
-                    width={50}
-                    height={50}
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-              </div>
-
-              {/* Bottom Left - After Effects */}
-              <div className="absolute top-12 sm:top-16 md:top-20 -left-6 sm:-left-10 md:-left-10">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 shadow-xl transition-transform duration-300 ease-out
-                            pointer-events-auto hover:scale-110 hover:-rotate-6">
-                  <Image
-                    src="/images/Adobe_Premiere_Pro_CC.png"
-                    alt="After Effects"
-                    width={50}
-                    height={50}
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-              </div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Image
+                src="/home/Homebb.jpg"
+                alt="Home BB"
+                fill
+                sizes="(max-width: 768px) 100vw, 800px"
+                className="object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-500"
+                priority
+                unoptimized
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
             </div>
           </div>
+
+          {/* Glow effect behind card */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-purple-600/20 blur-[60px] -z-10 rounded-full pointer-events-none" />
         </div>
-            
-        {/* Social & Contact */}
-        <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-4 px-4">
-          <div className="flex gap-3 sm:gap-3">
-            <a href="https://www.instagram.com/bb_edits00?igsh=MXNzajZwbTRtd255aw==" target="_blank" rel="noopener noreferrer" 
-               className="w-10 h-10 sm:w-10 sm:h-10 md:w-11 md:h-11 bg-gray-200 dark:bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center 
-                         text-gray-800 dark:text-white hover:bg-gray-300 dark:hover:bg-white/20 transition-all duration-300 hover:scale-110">
-              <Instagram className="w-5 h-5 sm:w-5 sm:h-5" />
-            </a>
-            <a href="https://youtube.com/@bbedits4567?si=6xAhz86mzCfc7v7z" target="_blank" rel="noopener noreferrer" 
-               className="w-10 h-10 sm:w-10 sm:h-10 md:w-11 md:h-11 bg-gray-200 dark:bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center 
-                         text-gray-800 dark:text-white hover:bg-gray-300 dark:hover:bg-white/20 transition-all duration-300 hover:scale-110">
-              <Youtube className="w-5 h-5 sm:w-5 sm:h-5" />
-            </a>
-            <a href="https://t.me/bbeditsanil" target="_blank" rel="noopener noreferrer" 
-               className="w-10 h-10 sm:w-10 sm:h-10 md:w-11 md:h-11 bg-gray-200 dark:bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center 
-                         text-gray-800 dark:text-white hover:bg-gray-300 dark:hover:bg-white/20 transition-all duration-300 hover:scale-110">
-              <Send className="w-5 h-5 sm:w-5 sm:h-5" />
-            </a>
-          </div>
-          <button className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-5 py-2 sm:px-6 sm:py-2.5 rounded-full font-semibold 
-                           flex items-center gap-2 hover:from-pink-600 hover:to-purple-700 transition-all duration-300 hover:scale-105 shadow-lg 
-                           text-sm sm:text-sm md:text-base whitespace-nowrap">
-            <Mail className="w-4 h-4 sm:w-4 sm:h-4" />
-            <span>Enroll Now</span>
-          </button>
-        </div>
+
       </div>
     </div>
   )

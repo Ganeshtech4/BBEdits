@@ -50,6 +50,7 @@ export default function RootLayout({
       </Head>
       <body
         className={`${poppins.variable} ${josefin.variable} !bg-white bg-no-repeat dark:bg-gradient-to-b dark:from-gray-900 dark:to-black duration-300`}
+        suppressHydrationWarning={true}
       >
         <Providers>
           <SessionProvider>
