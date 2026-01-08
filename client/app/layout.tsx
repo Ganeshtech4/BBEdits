@@ -74,6 +74,16 @@ const Custom: FC<{ children: React.ReactNode }> = ({ children }) => {
   useEffect(() => {
     setMounted(true);
     socketId.on("connection", () => { });
+    
+    // Ensure smooth rendering for GSAP animations
+    if (typeof window !== 'undefined') {
+      // Force a reflow to ensure all elements are properly positioned
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+        }, 100);
+      });
+    }
   }, []);
 
   if (!mounted) {
