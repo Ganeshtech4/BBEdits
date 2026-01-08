@@ -38,7 +38,7 @@ const NavItems: React.FC<Props> = ({ activeItem, isMobile }) => {
             <Link href={`${i.url}`} key={index} passHref>
               <span
                 className={`${activeItem === index
-                  ? "text-[#37a39a]"
+                  ? "text-[#7c3aed]"
                   : "dark:text-white text-black"
                   } text-[18px] px-3 font-Poppins font-[400]`}
               >
@@ -61,7 +61,7 @@ const NavItems: React.FC<Props> = ({ activeItem, isMobile }) => {
               <Link href={i.url} passHref key={index}>
                 <span
                   className={`${activeItem === index
-                    ? "text-[#37a39a]"
+                    ? "text-[#7c3aed]"
                     : "dark:text-white text-black"
                     } block py-5 text-[18px] px-6 font-Poppins font-[400]`}
                 >

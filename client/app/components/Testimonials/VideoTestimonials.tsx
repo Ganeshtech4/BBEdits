@@ -57,12 +57,13 @@ const VideoTestimonials = () => {
                 {/* Right Gradient Fade */}
                 <div className="absolute right-0 top-0 bottom-0 w-20 md:w-40 z-10 bg-gradient-to-l from-[#030014] to-transparent pointer-events-none" />
 
-                <Marquee pauseOnHover className="[--duration:40s] [--gap:1.5rem]">
+                <Marquee pauseOnHover className="[--duration:40s] [--gap:2rem]">
                     {testimonials.map((t, index) => (
                         <VideoCard
                             key={index}
                             name={t.name}
                             videoUrl={t.videoUrl}
+                            index={index}
                         />
                     ))}
                 </Marquee>

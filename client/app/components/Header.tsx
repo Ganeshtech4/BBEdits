@@ -99,21 +99,21 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
             <div
               className={`fixed top-4 left-1/2 -translate-x-1/2 h-[60px] z-[80] transition-all duration-300 rounded-full flex items-center justify-between px-4 border border-white/10 shadow-lg backdrop-blur-md
           ${active ? "bg-[#030014]/50 shadow-[0_0_20px_rgba(147,51,234,0.1)]" : "bg-[#030014]/30"}
-          w-[90%] max-w-[850px]
+          w-[90%] max-w-[720px]
         `}
             >
               {/* Logo */}
               <div className="flex items-center gap-2">
                 <Link href={"/"} className="flex items-center gap-2 group">
-                  <span className="text-2xl font-bold text-white tracking-tight group-hover:text-gray-300 transition-colors">
-                    {/*  IconPlaceholder */}
-                    <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
-                      <div className="w-2 h-2 bg-white rounded-full mx-[1px]"></div>
-                      <div className="w-2 h-2 bg-white rounded-full mx-[1px]"></div>
-                      <div className="w-2 h-2 bg-white rounded-full mx-[1px]"></div>
-                    </div>
-                  </span>
-                  {/* Text Logo if needed, user image shows clean look, maybe just icon? User said "BBEdits Logo BBedits" */}
+                  <div className="w-8 h-8 rounded-full overflow-hidden flex items-center justify-center">
+                    <Image
+                      src="/images/anil-logo.png"
+                      alt="BBEdits Logo"
+                      width={32}
+                      height={32}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
                   <span className="text-[20px] font-Poppins font-[600] text-black dark:text-white group-hover:text-[#37a39a] dark:group-hover:text-[#37a39a] transition-colors duration-300">
                     BBEdits
                   </span>
@@ -133,7 +133,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
                 {/* User Section / Sign In */}
                 {userData ? (
                   <Link href="/profile">
-                    <div className={`w-10 h-10 rounded-full overflow-hidden border-2 cursor-pointer transition-all ${activeItem === 5 ? "border-[#37a39a]" : "border-transparent"}`}>
+                    <div className={`w-10 h-10 rounded-full overflow-hidden border-2 cursor-pointer transition-all ${activeItem === 5 ? "border-[#7c3aed]" : "border-transparent"}`}>
                       <Image
                         src={userData?.user.avatar ? userData.user.avatar.url : avatar}
                         alt="User avatar"

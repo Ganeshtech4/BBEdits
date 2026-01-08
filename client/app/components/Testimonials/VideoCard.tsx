@@ -1,15 +1,28 @@
 import React from 'react';
 import { Play } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface VideoCardProps {
     name: string;
     videoUrl: string;
     thumbnail?: string;
+    index?: number;
 }
 
-const VideoCard: React.FC<VideoCardProps> = ({ name, videoUrl, thumbnail }) => {
+const VideoCard: React.FC<VideoCardProps> = ({ name, videoUrl, thumbnail, index = 0 }) => {
     return (
-        <div className="relative w-[200px] h-[350px] rounded-xl overflow-hidden cursor-pointer group border border-white/10 bg-black">
+        <motion.div 
+            className="relative w-[280px] h-[450px] rounded-xl overflow-hidden cursor-pointer group border border-white/10 bg-black"
+            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ 
+                duration: 0.6,
+                delay: index * 0.1,
+                ease: [0.22, 1, 0.36, 1]
+            }}
+            whileHover={{ y: -10, transition: { duration: 0.3 } }}
+        >
             {/* Thumbnail / Video Placeholder */}
             <div className="absolute inset-0 bg-black">
                 {thumbnail ? (
@@ -39,7 +52,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ name, videoUrl, thumbnail }) => {
             <div className="absolute bottom-1 right-2 z-20 opacity-60">
                 {/* Simple placeholder for logo if needed, skipping for now to keep clean */}
             </div>
-        </div>
+        </motion.div>
     );
 };
 
