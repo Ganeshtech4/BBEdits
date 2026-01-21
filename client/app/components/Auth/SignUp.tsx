@@ -61,8 +61,13 @@ const Signup: FC<Props> = ({ setRoute }) => {
 
   return (
     <div className="w-full px-2">
-      {/* Header */}
+      {/* Header with gradient accent */}
       <div className="text-center mb-8">
+        <div className="inline-block p-3 bg-gradient-to-r from-purple-600/10 to-violet-600/10 rounded-full mb-4">
+          <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-violet-600 rounded-full flex items-center justify-center">
+            <AiOutlineUser className="text-white" size={24} />
+          </div>
+        </div>
         <h1 className="text-3xl font-bold text-black dark:text-white mb-2">
           Create Account
         </h1>
@@ -77,8 +82,8 @@ const Signup: FC<Props> = ({ setRoute }) => {
           <label className="text-sm font-medium text-gray-700 dark:text-gray-300" htmlFor="name">
             Full Name
           </label>
-          <div className="relative">
-            <AiOutlineUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+          <div className="relative group">
+            <AiOutlineUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-purple-600 transition-colors" size={20} />
             <input
               type="text"
               name="name"
@@ -86,15 +91,15 @@ const Signup: FC<Props> = ({ setRoute }) => {
               onChange={handleChange}
               id="name"
               placeholder="John Doe"
-              className={`w-full pl-10 pr-4 py-3 rounded-lg border-2 transition-all duration-200 bg-white dark:bg-gray-800 text-black dark:text-white placeholder-gray-400 focus:outline-none focus:border-[#37a39a] ${
+              className={`w-full pl-10 pr-4 py-3 rounded-lg border-2 transition-all duration-200 bg-white dark:bg-gray-800 text-black dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600/20 ${
                 errors.name && touched.name 
-                  ? "border-red-500" 
-                  : "border-gray-200 dark:border-gray-700"
+                  ? "border-red-500 focus:border-red-500" 
+                  : "border-gray-200 dark:border-gray-700 focus:border-purple-600"
               }`}
             />
           </div>
           {errors.name && touched.name && (
-            <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+            <p className="text-red-500 text-xs mt-1 flex items-center gap-1 animate-in slide-in-from-top-1">
               <span>⚠</span> {errors.name}
             </p>
           )}
@@ -105,8 +110,8 @@ const Signup: FC<Props> = ({ setRoute }) => {
           <label className="text-sm font-medium text-gray-700 dark:text-gray-300" htmlFor="email">
             Email Address
           </label>
-          <div className="relative">
-            <AiOutlineMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+          <div className="relative group">
+            <AiOutlineMail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-purple-600 transition-colors" size={20} />
             <input
               type="email"
               name="email"
@@ -114,15 +119,15 @@ const Signup: FC<Props> = ({ setRoute }) => {
               onChange={handleChange}
               id="email"
               placeholder="your@email.com"
-              className={`w-full pl-10 pr-4 py-3 rounded-lg border-2 transition-all duration-200 bg-white dark:bg-gray-800 text-black dark:text-white placeholder-gray-400 focus:outline-none focus:border-[#37a39a] ${
+              className={`w-full pl-10 pr-4 py-3 rounded-lg border-2 transition-all duration-200 bg-white dark:bg-gray-800 text-black dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600/20 ${
                 errors.email && touched.email 
-                  ? "border-red-500" 
-                  : "border-gray-200 dark:border-gray-700"
+                  ? "border-red-500 focus:border-red-500" 
+                  : "border-gray-200 dark:border-gray-700 focus:border-purple-600"
               }`}
             />
           </div>
           {errors.email && touched.email && (
-            <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+            <p className="text-red-500 text-xs mt-1 flex items-center gap-1 animate-in slide-in-from-top-1">
               <span>⚠</span> {errors.email}
             </p>
           )}
@@ -133,8 +138,8 @@ const Signup: FC<Props> = ({ setRoute }) => {
           <label className="text-sm font-medium text-gray-700 dark:text-gray-300" htmlFor="password">
             Password
           </label>
-          <div className="relative">
-            <AiOutlineLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+          <div className="relative group">
+            <AiOutlineLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-purple-600 transition-colors" size={20} />
             <input
               type={!show ? "password" : "text"}
               name="password"
@@ -142,28 +147,28 @@ const Signup: FC<Props> = ({ setRoute }) => {
               onChange={handleChange}
               id="password"
               placeholder="••••••••"
-              className={`w-full pl-10 pr-12 py-3 rounded-lg border-2 transition-all duration-200 bg-white dark:bg-gray-800 text-black dark:text-white placeholder-gray-400 focus:outline-none focus:border-[#37a39a] ${
+              className={`w-full pl-10 pr-12 py-3 rounded-lg border-2 transition-all duration-200 bg-white dark:bg-gray-800 text-black dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-600/20 ${
                 errors.password && touched.password 
-                  ? "border-red-500" 
-                  : "border-gray-200 dark:border-gray-700"
+                  ? "border-red-500 focus:border-red-500" 
+                  : "border-gray-200 dark:border-gray-700 focus:border-purple-600"
               }`}
             />
             {!show ? (
               <AiOutlineEyeInvisible
-                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
                 size={20}
                 onClick={() => setShow(true)}
               />
             ) : (
               <AiOutlineEye
-                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors"
                 size={20}
                 onClick={() => setShow(false)}
               />
             )}
           </div>
           {errors.password && touched.password && (
-            <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+            <p className="text-red-500 text-xs mt-1 flex items-center gap-1 animate-in slide-in-from-top-1">
               <span>⚠</span> {errors.password}
             </p>
           )}
@@ -173,7 +178,7 @@ const Signup: FC<Props> = ({ setRoute }) => {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full py-3 px-4 bg-gradient-to-r from-[#37a39a] to-[#2d8f85] text-white font-semibold rounded-lg hover:shadow-lg transform hover:scale-[1.02] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          className="w-full py-3 px-4 bg-gradient-to-r from-purple-600 to-violet-600 text-white font-semibold rounded-lg hover:shadow-[0_0_30px_rgba(147,51,234,0.5)] transform hover:scale-[1.02] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none mt-6"
         >
           {isLoading ? (
             <span className="flex items-center justify-center gap-2">
@@ -204,7 +209,7 @@ const Signup: FC<Props> = ({ setRoute }) => {
         <button
           type="button"
           onClick={() => signIn("google")}
-          className="w-full py-3 px-4 border-2 border-gray-200 dark:border-gray-700 rounded-lg flex items-center justify-center gap-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 hover:shadow-md group"
+          className="w-full py-3 px-4 border-2 border-gray-200 dark:border-gray-700 rounded-lg flex items-center justify-center gap-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 hover:shadow-md hover:border-purple-600/30 group"
         >
           <FcGoogle size={24} />
           <span className="font-medium text-gray-700 dark:text-gray-300 group-hover:text-black dark:group-hover:text-white">
@@ -216,7 +221,7 @@ const Signup: FC<Props> = ({ setRoute }) => {
         <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-6">
           Already have an account?{" "}
           <span
-            className="text-[#37a39a] font-semibold cursor-pointer hover:underline"
+            className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-violet-600 font-semibold cursor-pointer hover:underline"
             onClick={() => setRoute("Login")}
           >
             Sign in now

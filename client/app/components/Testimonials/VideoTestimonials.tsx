@@ -1,50 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import VideoCard from './VideoCard';
 
 const testimonials = [
     {
-        name: "Kalidhasan",
-        videoUrl: "#",
-        thumbnail: "/testimonials/thumb1.jpg"
+        name: "Student 1",
+        videoUrl: "https://player.mediadelivery.net/embed/584142/95c1cd03-d6fd-497c-9e93-e4c31de5e272",
+        thumbnail: "/images/Thumbnails/t1.jpg"
     },
     {
-        name: "Thivagaran",
-        videoUrl: "#",
-        thumbnail: "/testimonials/thumb2.jpg"
+        name: "Student 2",
+        videoUrl: "https://player.mediadelivery.net/embed/584142/be5743ce-794d-4a58-a0a9-ea05164e7bc3",
+        thumbnail: "/images/Thumbnails/t2.jpg"
     },
     {
-        name: "Manikandan",
-        videoUrl: "#",
-        thumbnail: "/testimonials/thumb3.jpg"
+        name: "Student 3",
+        videoUrl: "https://player.mediadelivery.net/embed/584142/c470f30a-b6bd-420f-84ec-da3279d22142",
+        thumbnail: "/images/Thumbnails/t3.jpg"
     },
     {
-        name: "Dinesh",
-        videoUrl: "#",
-        thumbnail: "/testimonials/thumb4.jpg"
+        name: "Student 4",
+        videoUrl: "https://player.mediadelivery.net/embed/584142/79e5956c-d233-46b3-8956-656a124dd065",
+        thumbnail: "/images/Thumbnails/t4.jpg"
     },
     {
-        name: "Kumara Manikandan",
-        videoUrl: "#",
-        thumbnail: "/testimonials/thumb5.jpg"
-    },
-    {
-        name: "Bharathiraja",
-        videoUrl: "#",
-        thumbnail: "/testimonials/thumb6.jpg"
-    },
-    {
-        name: "Sathish",
-        videoUrl: "#",
-        thumbnail: "/testimonials/thumb7.jpg"
-    },
-    {
-        name: "Raju",
-        videoUrl: "#",
-        thumbnail: "/testimonials/thumb8.jpg"
+        name: "Student 5",
+        videoUrl: "https://player.mediadelivery.net/embed/584142/bbf129db-d365-47d9-a5d7-124235084c8b",
+        thumbnail: "/images/Thumbnails/t5.jpg"
     },
 ];
 
 const VideoTestimonials = () => {
+    const [playingIndex, setPlayingIndex] = useState<number | null>(null);
+
     // Duplicate testimonials for seamless loop
     const allTestimonials = [...testimonials, ...testimonials];
 
@@ -83,6 +70,8 @@ const VideoTestimonials = () => {
                                         videoUrl={testimonial.videoUrl}
                                         thumbnail={testimonial.thumbnail}
                                         index={index}
+                                        isPlaying={playingIndex === index}
+                                        onPlay={() => setPlayingIndex(index)}
                                     />
                                 </div>
                             ))}

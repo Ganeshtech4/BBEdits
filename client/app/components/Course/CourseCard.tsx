@@ -58,7 +58,7 @@ const CourseCard: FC<Props> = ({ item, isProfile }) => {
                   {item.price === 0 ? (
                     <span className="text-green-400">Free</span>
                   ) : (
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-violet-600">₹{item.price}</span>
+                    <span className="text-white">₹{item.price}</span>
                   )}
                 </h3>
                 {item.price > 0 && item.estimatedPrice > item.price && (

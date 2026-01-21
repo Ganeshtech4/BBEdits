@@ -14,7 +14,7 @@ const OurWorks = () => {
     const allWorks = [...works, ...works];
     
     return (
-        <div className="w-full py-8 sm:py-12 md:py-16 lg:py-20 pt-10 sm:pt-12 md:pt-14 lg:pt-16 overflow-hidden relative">
+        <div className="w-full py-8 sm:py-12 md:py-16 lg:py-20 pt-10 sm:pt-12 md:pt-14 lg:pt-16 overflow-hidden relative min-h-screen flex items-center justify-center">
             {/* Background Image with Overlay */}
             <div 
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat"

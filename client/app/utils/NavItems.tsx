@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 
 export const navItemsData = [
   {
@@ -30,6 +30,8 @@ type Props = {
 };
 
 const NavItems: React.FC<Props> = ({ activeItem, isMobile }) => {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
   return (
     <>
       <div className="hidden 800px:flex">
@@ -40,9 +42,24 @@ const NavItems: React.FC<Props> = ({ activeItem, isMobile }) => {
                 className={`${activeItem === index
                   ? "text-[#7c3aed]"
                   : "dark:text-white text-black"
-                  } text-[18px] px-3 font-Poppins font-[400]`}
+                  } text-[18px] px-3 font-Poppins font-[400] relative inline-block overflow-hidden h-[24px] cursor-pointer`}
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
               >
-                {i.name}
+                <span 
+                  className={`inline-block transition-transform duration-300 ease-out ${
+                    hoveredIndex === index ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100'
+                  }`}
+                >
+                  {i.name}
+                </span>
+                <span 
+                  className={`absolute left-0 top-full w-full px-3 inline-block transition-transform duration-300 ease-out ${
+                    hoveredIndex === index ? '-translate-y-full opacity-100' : 'translate-y-0 opacity-0'
+                  }`}
+                >
+                  {i.name}
+                </span>
               </span>
             </Link>
           ))}

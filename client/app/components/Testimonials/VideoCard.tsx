@@ -6,14 +6,14 @@ interface VideoCardProps {
     videoUrl: string;
     thumbnail?: string;
     index?: number;
+    isPlaying?: boolean;
+    onPlay?: () => void;
 }
 
-const VideoCard: React.FC<VideoCardProps> = ({ name, videoUrl, thumbnail, index = 0 }) => {
-    const [isPlaying, setIsPlaying] = useState(false);
-
+const VideoCard: React.FC<VideoCardProps> = ({ name, videoUrl, thumbnail, index = 0, isPlaying = false, onPlay }) => {
     const handlePlay = () => {
-        if (videoUrl && videoUrl !== '#') {
-            setIsPlaying(true);
+        if (videoUrl && videoUrl !== '#' && onPlay) {
+            onPlay();
         }
     };
 

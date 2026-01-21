@@ -8,7 +8,7 @@ const projects = [
   {
     title: 'Premiere Pro',
     description: 'Master Adobe Premiere Pro with our comprehensive course designed for aspiring video editors and content creators. Learn professional video editing techniques, advanced workflows, and industry-standard practices to create stunning videos. Dive deep into color correction, audio mixing, multi-cam editing, and advanced effects. Whether you\'re creating content for YouTube, films, or corporate videos, this course covers everything from basic cuts to complex storytelling techniques. Build a strong foundation and develop the skills needed to compete in the professional video editing industry.',
-    src: '/home/cards/course.jpg',
+    src: '/home/cards/pr.png',
     link: '#',
   },
   {

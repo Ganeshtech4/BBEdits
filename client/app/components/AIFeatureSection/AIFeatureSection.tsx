@@ -40,7 +40,7 @@ export default function AIFeatureSection() {
   const words = title.split(' ');
 
   return (
-    <section ref={sectionRef} className="w-full bg-gradient-to-b from-[#030014] to-black pt-8 sm:pt-16 md:pt-20 lg:pt-24 xl:pt-28 pb-12 sm:pb-16 md:pb-20 lg:pb-0 relative overflow-hidden">
+    <section ref={sectionRef} className="w-full bg-gradient-to-b from-[#030014] to-black pt-0 pb-12 sm:pb-16 md:pb-20 lg:pb-0 relative overflow-hidden">
       {/* Background Effects */}
       <div className="absolute top-1/2 left-1/4 w-[500px] h-[500px] bg-purple-900/20 blur-[150px] rounded-full pointer-events-none" />
       

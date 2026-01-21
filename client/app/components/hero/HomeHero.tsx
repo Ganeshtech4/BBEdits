@@ -105,7 +105,7 @@ export default function HomeHero() {
   const words = titleText.split(' ')
 
   return (
-    <div className="relative w-full min-h-screen bg-[#030014] overflow-hidden flex flex-col items-center justify-center pt-12 sm:pt-20 md:pt-24 lg:pt-28 xl:pt-32 pb-8 sm:pb-16 md:pb-20 lg:pb-24 xl:pb-32 px-4 sm:px-6 md:px-8" ref={heroRef}>
+    <div className="relative w-full min-h-screen bg-[#030014] overflow-hidden flex flex-col items-center justify-center pt-12 sm:pt-20 md:pt-24 lg:pt-28 xl:pt-32 pb-6 sm:pb-10 md:pb-16 lg:pb-19 xl:pb-16 px-4 sm:px-6 md:px-8" ref={heroRef}>
       {/* Background Gradients */}
       <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[400px] sm:w-[600px] md:w-[800px] h-[200px] sm:h-[300px] md:h-[400px] bg-purple-900/40 blur-[80px] sm:blur-[100px] md:blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-full h-[150px] sm:h-[200px] md:h-[300px] bg-gradient-to-t from-[#030014] to-transparent z-10 pointer-events-none" />
@@ -182,25 +182,35 @@ export default function HomeHero() {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 z-20 mt-4 sm:mt-6 md:mt-8 w-full sm:w-auto px-4 sm:px-0">
-          {/* Start Course Button */}
-          <button 
-            onClick={() => router.push('/courses')}
-            className="w-full sm:w-auto relative px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-[#5b21b6] border border-[#7c3aed] text-white font-semibold text-base sm:text-lg hover:bg-[#4c1d95] transition-all duration-300 shadow-[0_0_20px_rgba(124,58,237,0.5)] hover:shadow-[0_0_30px_rgba(124,58,237,0.8)] flex items-center justify-center gap-3 group"
-          >
-            <span>Start Course</span>
-            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-colors">
-              <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-            </div>
-          </button>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 z-20 mt-4 sm:mt-6 md:mt-8 w-full px-4 sm:px-0 max-w-5xl mx-auto">
+          {/* Start Course Button with Line */}
+          <div className="flex items-center gap-4 sm:gap-6 w-full sm:w-auto sm:flex-1 justify-end">
+            {/* Decorative Line - Hidden on mobile */}
+            <div className="hidden sm:block flex-1 max-w-[200px] lg:max-w-[280px] h-px bg-gradient-to-r from-transparent via-white/50 to-white" />
+            
+            <button 
+              onClick={() => router.push('/courses')}
+              className="w-full sm:w-auto relative px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-[#5b21b6] border border-[#7c3aed] text-white font-semibold text-base sm:text-lg hover:bg-[#4c1d95] transition-all duration-300 shadow-[0_0_20px_rgba(124,58,237,0.5)] hover:shadow-[0_0_30px_rgba(124,58,237,0.8)] flex items-center justify-center gap-3 group whitespace-nowrap"
+            >
+              <span>Start Course</span>
+              <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-colors">
+                <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              </div>
+            </button>
+          </div>
 
-          {/* Join Community Button */}
-          <button 
-            onClick={handleCommunityClick}
-            className="w-full sm:w-auto px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border border-white/10 hover:border-white/20 bg-transparent text-white font-semibold text-base sm:text-lg hover:bg-white/5 transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.5)] flex items-center justify-center"
-          >
-            Join Community
-          </button>
+          {/* Join Community Button with Dot */}
+          <div className="flex items-center gap-4 sm:gap-6 w-full sm:w-auto sm:flex-1">
+            <button 
+              onClick={handleCommunityClick}
+              className="w-full sm:w-auto px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border border-white/10 hover:border-white/20 bg-transparent text-white font-semibold text-base sm:text-lg hover:bg-white/5 transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.5)] flex items-center justify-center whitespace-nowrap"
+            >
+              Join Community
+            </button>
+            
+            {/* Decorative Dot - Hidden on mobile */}
+            <div className="hidden sm:block w-2 h-2 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
+          </div>
         </div>
 
         {/* Main Video Card with 3D Effect - Centered Below */}
