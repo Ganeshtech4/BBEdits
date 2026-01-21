@@ -18,9 +18,10 @@
   }
 }
 
-/* Clean scroll for GSAP ScrollTrigger */
+/* Clean scroll - auto for better performance */
 html {
   scroll-padding-top: 80px;
+  scroll-behavior: auto;
 }
 
 body {
@@ -31,9 +32,84 @@ body {
       overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Ensure smooth rendering */
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
+}
+
+/* Hide scrollbars for custom horizontal scroll sections */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Performance optimizations */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Optimize scrolling performance - use sparingly */
+.will-change-transform {
+  will-change: transform;
+}
+
+/* Continuous scroll animation for testimonials */
+@keyframes scroll-continuous {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll-continuous {
+  animation: scroll-continuous 40s linear infinite;
+}
+
+/* Text testimonials marquee animations */
+@keyframes marquee-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-marquee-left {
+  animation: marquee-left 30s linear infinite;
+}
+
+.animate-marquee-right {
+  animation: marquee-right 30s linear infinite;
+}
+
+/* Our Works smooth infinite scroll */
+@keyframes scroll-works {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll-works {
+  animation: scroll-works 30s linear infinite;
+}
+
+.hover\:animation-paused:hover {
+  animation-play-state: paused;
 }
 
 /* Chrome, Safari, Edge, Opera */

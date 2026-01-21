@@ -5,7 +5,7 @@ type Props = {};
 
 const Policy = (props: Props) => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen pt-44">
       <div className={"w-[95%] 800px:w-[85%] m-auto py-8 800px:py-12 text-black dark:text-white px-3"}>
         <h1 className={`${styles.title} !text-start pt-2`}>
           Terms & Conditions

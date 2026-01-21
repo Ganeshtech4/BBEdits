@@ -55,7 +55,7 @@ const CoursesContent = (props: Props) => {
             setOpen={setOpen}
             activeItem={1}
           />
-          <div className="w-[95%] 800px:w-[85%] m-auto min-h-[70vh]">
+          <div className="w-[95%] 800px:w-[85%] m-auto min-h-[70vh] pt-44">
             <Heading
               title={"All courses - BBEdits"}
               description={"BBEdits is a programming community."}

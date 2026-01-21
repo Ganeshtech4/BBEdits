@@ -49,12 +49,12 @@ export default function RootLayout({
         <meta name="twitter:image" content="https://bbedits.in/images/anil-logo.png" />
       </Head>
       <body
-        className={`${poppins.variable} ${josefin.variable} !bg-white bg-no-repeat dark:bg-gradient-to-b dark:from-gray-900 dark:to-black duration-300`}
+        className={`${poppins.variable} ${josefin.variable} bg-gradient-to-b from-gray-900 to-black bg-no-repeat duration-300`}
         suppressHydrationWarning={true}
       >
         <Providers>
           <SessionProvider>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} forcedTheme="dark">
               <Custom>
                 <div>{children}</div>
               </Custom>
@@ -74,16 +74,6 @@ const Custom: FC<{ children: React.ReactNode }> = ({ children }) => {
   useEffect(() => {
     setMounted(true);
     socketId.on("connection", () => { });
-    
-    // Ensure smooth rendering for GSAP animations
-    if (typeof window !== 'undefined') {
-      // Force a reflow to ensure all elements are properly positioned
-      window.addEventListener('load', () => {
-        setTimeout(() => {
-          window.scrollTo(0, 0);
-        }, 100);
-      });
-    }
   }, []);
 
   if (!mounted) {

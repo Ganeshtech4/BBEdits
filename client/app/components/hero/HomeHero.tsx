@@ -4,22 +4,46 @@ import React, { useState, useEffect, useRef } from 'react'
 import Threads from '../Threads'
 import { ArrowRight } from 'lucide-react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { useSelector } from 'react-redux'
 
 const THREADS_COLOR: [number, number, number] = [0.32, 0.15, 1];
 
 export default function HomeHero() {
+  const router = useRouter()
+  const { user } = useSelector((state: any) => state.auth)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [isPlaying, setIsPlaying] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
   const heroRef = useRef<HTMLDivElement>(null)
+  const titleRef = useRef<HTMLDivElement>(null)
   
-  // YouTube Video ID - Replace with your actual video ID (leave empty to show only thumbnail)
-  const youtubeVideoId = "" // Example: "dQw4w9WgXcQ" from https://www.youtube.com/watch?v=dQw4w9WgXcQ
+  // YouTube Video ID
+  const youtubeVideoId = "v33Zf9jXq08"
+
+  // Check if user has enrolled in any course
+  const hasEnrolledCourses = user && typeof user === 'object' && user.courses && user.courses.length > 0
+
+  const handleCommunityClick = () => {
+    if (hasEnrolledCourses) {
+      window.open('https://t.me/bbeditsanil', '_blank')
+    } else {
+      alert('Please enroll in a course to join our community!')
+    }
+  }
 
   useEffect(() => {
     let animationFrameId: number
+    let lastTime = 0
+    const throttleDelay = 16 // ~60fps
 
     const handleMouseMove = (e: MouseEvent) => {
+      const now = Date.now()
+      if (now - lastTime < throttleDelay) return
+      lastTime = now
+      
       cancelAnimationFrame(animationFrameId)
       animationFrameId = requestAnimationFrame(() => {
         if (heroRef.current) {
@@ -50,12 +74,41 @@ export default function HomeHero() {
     }
   }, [])
 
-  return (
-    <div className="relative w-full min-h-screen bg-[#030014] overflow-hidden flex flex-col items-center justify-center pt-48 pb-32" ref={heroRef}>
-      {/* Background Gradients */}
-      <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-purple-900/40 blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-full h-[300px] bg-gradient-to-t from-[#030014] to-transparent z-10 pointer-events-none" />
+  useEffect(() => {
+    // Trigger intro animations on mount
+    setIsMounted(true)
+    setIsVisible(true)
+  }, [])
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+        }
+      },
+      { threshold: 0.1 }
+    )
+
+    if (titleRef.current) {
+      observer.observe(titleRef.current)
+    }
+
+    return () => {
+      if (titleRef.current) {
+        observer.unobserve(titleRef.current)
+      }
+    }
+  }, [])
+
+  const titleText = "Video Editing"
+  const words = titleText.split(' ')
+
+  return (
+    <div className="relative w-full min-h-screen bg-[#030014] overflow-hidden flex flex-col items-center justify-center pt-12 sm:pt-20 md:pt-24 lg:pt-28 xl:pt-32 pb-8 sm:pb-16 md:pb-20 lg:pb-24 xl:pb-32 px-4 sm:px-6 md:px-8" ref={heroRef}>
+      {/* Background Gradients */}
+      <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[400px] sm:w-[600px] md:w-[800px] h-[200px] sm:h-[300px] md:h-[400px] bg-purple-900/40 blur-[80px] sm:blur-[100px] md:blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-full h-[150px] sm:h-[200px] md:h-[300px] bg-gradient-to-t from-[#030014] to-transparent z-10 pointer-events-none" />
 
       {/* Threads Wave Effect - Full Background */}
       <div className="absolute inset-0 z-0 pointer-events-none opacity-40">
@@ -68,48 +121,101 @@ export default function HomeHero() {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 w-full max-w-6xl mx-auto px-4 flex flex-col items-center justify-center text-center gap-6">
+      <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col items-center justify-center text-center gap-4 sm:gap-6">
 
         {/* Text Content */}
-        <div className="max-w-4xl mx-auto space-y-6">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-tight">
-            Video Editing{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-violet-600">
+        <div className="max-w-4xl mx-auto space-y-4 sm:space-y-6">
+          <h1 ref={titleRef} className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-white leading-tight">
+            <style jsx>{`
+              @keyframes slideUp {
+                from {
+                  opacity: 0;
+                  transform: translateY(20px);
+                }
+                to {
+                  opacity: 1;
+                  transform: translateY(0);
+                }
+              }
+              @keyframes fadeInScale {
+                from {
+                  opacity: 0;
+                  transform: scale(0.95) translateY(30px);
+                }
+                to {
+                  opacity: 1;
+                  transform: scale(1) translateY(0);
+                }
+              }
+            `}</style>
+            {words.map((word, index) => (
+              <span
+                key={index}
+                style={{
+                  display: 'inline-block',
+                  opacity: isVisible ? 1 : 0,
+                  animation: isVisible ? `slideUp 0.6s ease-out ${index * 0.1}s forwards` : 'none',
+                  marginRight: '0.25em'
+                }}
+              >
+                {word}
+              </span>
+            ))}{" "}
+            <span 
+              className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-violet-600"
+              style={{
+                display: 'inline-block',
+                opacity: isVisible ? 1 : 0,
+                animation: isVisible ? `slideUp 0.6s ease-out ${words.length * 0.1}s forwards` : 'none',
+              }}
+            >
               Mastery
             </span>
           </h1>
-          <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed font-light">
+          <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed font-light px-4 sm:px-0">
             Master the art of video editing with our comprehensive courses.
-            <br />
-            From beginner basics to advanced techniques, learn professional
-            <br className="hidden md:block" />
+            <br className="hidden sm:block" />
+            From beginner basics to advanced techniques, learn professional{" "}
+            <br className="hidden lg:block" />
             editing skills that transform your creative vision into stunning reality.
           </p>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row items-center gap-4 z-20 mt-8">
-          {/* Join Waitlist Button */}
-          <button className="relative px-8 py-3 rounded-2xl bg-[#5b21b6] border border-[#7c3aed] text-white font-semibold text-lg hover:bg-[#4c1d95] transition-all duration-300 shadow-[0_0_20px_rgba(124,58,237,0.5)] hover:shadow-[0_0_30px_rgba(124,58,237,0.8)] flex items-center gap-3 group">
-            <span>Join Waitlist</span>
-            <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-colors">
-              <ArrowRight className="w-3.5 h-3.5" />
+        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 z-20 mt-4 sm:mt-6 md:mt-8 w-full sm:w-auto px-4 sm:px-0">
+          {/* Start Course Button */}
+          <button 
+            onClick={() => router.push('/courses')}
+            className="w-full sm:w-auto relative px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-[#5b21b6] border border-[#7c3aed] text-white font-semibold text-base sm:text-lg hover:bg-[#4c1d95] transition-all duration-300 shadow-[0_0_20px_rgba(124,58,237,0.5)] hover:shadow-[0_0_30px_rgba(124,58,237,0.8)] flex items-center justify-center gap-3 group"
+          >
+            <span>Start Course</span>
+            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-colors">
+              <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
             </div>
           </button>
 
           {/* Join Community Button */}
-          <button className="px-8 py-3 rounded-2xl border border-white/10 hover:border-white/20 bg-transparent text-white font-semibold text-lg hover:bg-white/5 transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.5)] flex items-center justify-center">
+          <button 
+            onClick={handleCommunityClick}
+            className="w-full sm:w-auto px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl border border-white/10 hover:border-white/20 bg-transparent text-white font-semibold text-base sm:text-lg hover:bg-white/5 transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.5)] flex items-center justify-center"
+          >
             Join Community
           </button>
         </div>
 
         {/* Main Video Card with 3D Effect - Centered Below */}
-        <div className="relative mt-16 group cursor-pointer perspective-1000">
+        <div 
+          className="relative mt-8 sm:mt-12 md:mt-16 group cursor-pointer perspective-1000 w-full max-w-[90vw] sm:max-w-[85vw] md:max-w-[1000px]"
+          style={{
+            opacity: isMounted ? 1 : 0,
+            animation: isMounted ? 'fadeInScale 0.8s ease-out 0.4s forwards' : 'none',
+          }}
+        >
           <div
             ref={cardRef}
-            className="relative w-[450px] sm:w-[1000px] h-[280px] sm:h-[560px]
+            className="relative w-full aspect-video
                       bg-gradient-to-br from-gray-900/80 to-black/80
-                      rounded-2xl backdrop-blur-sm border border-purple-500/30 shadow-[0_0_50px_rgba(147,51,234,0.15)]
+                      rounded-lg sm:rounded-xl md:rounded-2xl backdrop-blur-sm border border-purple-500/30 shadow-[0_0_30px_rgba(147,51,234,0.1)]
                       transition-all duration-300 ease-out overflow-hidden"
             style={{
               transform: `rotateY(${mousePosition.x * 0.5}deg) rotateX(${-mousePosition.y * 0.5}deg)`,
@@ -135,10 +241,37 @@ export default function HomeHero() {
                 {/* Play Button Overlay - Only show if video ID exists */}
                 {youtubeVideoId && (
                   <div className="absolute inset-0 flex items-center justify-center z-10">
-                    <div className="w-20 h-20 sm:w-24 sm:h-24 bg-purple-600/90 rounded-full flex items-center justify-center backdrop-blur-sm group-hover:scale-110 group-hover:bg-purple-500 transition-all duration-300 shadow-[0_0_30px_rgba(147,51,234,0.6)]">
-                      <svg className="w-10 h-10 sm:w-12 sm:h-12 text-white ml-2" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                      </svg>
+                    <style jsx>{`
+                      @keyframes pulse {
+                        0%, 100% {
+                          transform: scale(1);
+                          opacity: 0.6;
+                        }
+                        50% {
+                          transform: scale(1.1);
+                          opacity: 0.3;
+                        }
+                      }
+                    `}</style>
+                    <div className="relative flex items-center justify-center">
+                      {/* Outer pulsing ring */}
+                      <div 
+                        className="absolute w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full border-2 border-purple-400/40"
+                        style={{ animation: 'pulse 2s ease-in-out infinite' }}
+                      ></div>
+                      
+                      {/* Hollow transparent ring with gradient border */}
+                      <div className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full backdrop-blur-md bg-white/10 border-[3px] border-transparent bg-clip-padding group-hover:scale-110 transition-all duration-300 shadow-[0_0_40px_rgba(124,58,237,0.6)] flex items-center justify-center"
+                           style={{
+                             backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), linear-gradient(135deg, #a855f7, #7c3aed)',
+                             backgroundOrigin: 'border-box',
+                             backgroundClip: 'padding-box, border-box',
+                           }}>
+                        {/* Play icon transparent with white outline */}
+                        <svg className="w-7 h-7 sm:w-9 sm:h-9 md:w-11 md:h-11 ml-0.5" viewBox="0 0 24 24" fill="none">
+                          <path d="M8 5v14l11-7z" fill="transparent" stroke="white" strokeWidth="1.5" strokeLinejoin="round" />
+                        </svg>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -156,7 +289,7 @@ export default function HomeHero() {
             ) : null}
           </div>
 
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-purple-600/20 blur-[60px] -z-10 rounded-full pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-purple-600/10 blur-[30px] sm:blur-[40px] -z-10 rounded-full pointer-events-none" />
         </div>
 
       </div>

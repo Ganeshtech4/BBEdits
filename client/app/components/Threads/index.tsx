@@ -131,10 +131,20 @@ interface ThreadsProps {
 const Threads: React.FC<ThreadsProps> = ({ color = [1, 1, 1], amplitude = 1, distance = 0, enableMouseInteraction = false, ...rest }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const animationFrameId = useRef<number>();
+    const isVisible = useRef(true);
 
     useEffect(() => {
         if (!containerRef.current) return;
         const container = containerRef.current;
+
+        // Pause animation when not visible
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                isVisible.current = entry.isIntersecting;
+            },
+            { threshold: 0 }
+        );
+        observer.observe(container);
 
         const renderer = new Renderer({ alpha: true });
         const gl = renderer.gl;
@@ -189,25 +199,28 @@ const Threads: React.FC<ThreadsProps> = ({ color = [1, 1, 1], amplitude = 1, dis
         }
 
         function update(t: number) {
-            if (enableMouseInteraction) {
-                const smoothing = 0.05;
-                currentMouse[0] += smoothing * (targetMouse[0] - currentMouse[0]);
-                currentMouse[1] += smoothing * (targetMouse[1] - currentMouse[1]);
-                program.uniforms.uMouse.value[0] = currentMouse[0];
-                program.uniforms.uMouse.value[1] = currentMouse[1];
-            } else {
-                program.uniforms.uMouse.value[0] = 0.5;
-                program.uniforms.uMouse.value[1] = 0.5;
-            }
-            program.uniforms.iTime.value = t * 0.001;
+            if (isVisible.current) {
+                if (enableMouseInteraction) {
+                    const smoothing = 0.05;
+                    currentMouse[0] += smoothing * (targetMouse[0] - currentMouse[0]);
+                    currentMouse[1] += smoothing * (targetMouse[1] - currentMouse[1]);
+                    program.uniforms.uMouse.value[0] = currentMouse[0];
+                    program.uniforms.uMouse.value[1] = currentMouse[1];
+                } else {
+                    program.uniforms.uMouse.value[0] = 0.5;
+                    program.uniforms.uMouse.value[1] = 0.5;
+                }
+                program.uniforms.iTime.value = t * 0.001;
 
-            renderer.render({ scene: mesh });
+                renderer.render({ scene: mesh });
+            }
             animationFrameId.current = requestAnimationFrame(update);
         }
         animationFrameId.current = requestAnimationFrame(update);
 
         return () => {
             if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
+            observer.disconnect();
             window.removeEventListener('resize', resize);
 
             if (enableMouseInteraction) {

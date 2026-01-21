@@ -16,7 +16,7 @@ const Page: FC<Props> = (props) => {
   const {user} = useSelector((state:any) => state.auth);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen pt-36">
       <Protected>
         <Heading
           title={`${user?.name} profile - BBEdits`}
