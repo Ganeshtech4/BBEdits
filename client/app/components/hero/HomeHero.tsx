@@ -162,11 +162,12 @@ export default function HomeHero() {
               </span>
             ))}{" "}
             <span 
-              className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-violet-600"
+              className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-violet-600 inline-block"
               style={{
-                display: 'inline-block',
                 opacity: isVisible ? 1 : 0,
                 animation: isVisible ? `slideUp 0.6s ease-out ${words.length * 0.1}s forwards` : 'none',
+                lineHeight: '1.3',
+                paddingBottom: '0.15em',
               }}
             >
               Mastery
@@ -184,13 +185,16 @@ export default function HomeHero() {
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 z-20 mt-4 sm:mt-6 md:mt-8 w-full px-4 sm:px-0 max-w-5xl mx-auto">
           {/* Start Course Button with Line */}
-          <div className="flex items-center gap-4 sm:gap-6 w-full sm:w-auto sm:flex-1 justify-end">
+          <div className="flex items-center w-full sm:w-auto sm:flex-1 justify-end">
             {/* Decorative Line - Hidden on mobile */}
             <div className="hidden sm:block flex-1 max-w-[200px] lg:max-w-[280px] h-px bg-gradient-to-r from-transparent via-white/50 to-white" />
             
+            {/* Decorative Dot - Hidden on mobile */}
+            <div className="hidden sm:block w-2 h-2 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
+            
             <button 
               onClick={() => router.push('/courses')}
-              className="w-full sm:w-auto relative px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-[#5b21b6] border border-[#7c3aed] text-white font-semibold text-base sm:text-lg hover:bg-[#4c1d95] transition-all duration-300 shadow-[0_0_20px_rgba(124,58,237,0.5)] hover:shadow-[0_0_30px_rgba(124,58,237,0.8)] flex items-center justify-center gap-3 group whitespace-nowrap"
+              className="w-full sm:w-auto relative px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-[#5b21b6] border border-[#7c3aed] text-white font-semibold text-base sm:text-lg hover:bg-[#4c1d95] transition-all duration-300 shadow-[0_0_20px_rgba(124,58,237,0.5)] hover:shadow-[0_0_30px_rgba(124,58,237,0.8)] flex items-center justify-center gap-3 group whitespace-nowrap ml-4 sm:ml-6"
             >
               <span>Start Course</span>
               <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white/30 transition-colors">

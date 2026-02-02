@@ -1,5 +1,6 @@
 import React from 'react';
 import WorkCard from './WorkCard';
+import Link from 'next/link';
 
 const works = [
     { image: '/home/work/work1.webp' },
@@ -14,7 +15,7 @@ const OurWorks = () => {
     const allWorks = [...works, ...works];
     
     return (
-        <div className="w-full py-8 sm:py-12 md:py-16 lg:py-20 pt-10 sm:pt-12 md:pt-14 lg:pt-16 overflow-hidden relative min-h-screen flex items-center justify-center">
+        <div className="w-full py-12 sm:py-16 md:py-20 lg:py-24 pt-12 sm:pt-16 md:pt-20 lg:pt-24 overflow-hidden relative flex items-center justify-center">
             {/* Background Image with Overlay */}
             <div 
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -22,7 +23,7 @@ const OurWorks = () => {
             />
             
             {/* Dark Gradient Overlay for readability */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/75 to-black/85" />
             
             {/* Subtle Purple Tint Overlay */}
             <div className="absolute inset-0 bg-gradient-to-br from-purple-900/10 via-transparent to-violet-900/10" />
@@ -61,9 +62,11 @@ const OurWorks = () => {
                         From wedding films to reels and client work
                     </p>
 
-                    <button className="bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white px-6 sm:px-8 md:px-10 py-2.5 sm:py-3 md:py-4 rounded-full font-bold text-sm sm:text-base tracking-wide hover:scale-105 transition-all duration-300 uppercase shadow-[0_0_30px_rgba(147,51,234,0.4)] hover:shadow-[0_0_40px_rgba(147,51,234,0.6)]">
-                        Watch Our Work
-                    </button>
+                    <Link href="/our-works">
+                        <button className="bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white px-6 sm:px-8 md:px-10 py-2.5 sm:py-3 md:py-4 rounded-full font-bold text-sm sm:text-base tracking-wide hover:scale-105 transition-all duration-300 uppercase shadow-[0_0_30px_rgba(147,51,234,0.4)] hover:shadow-[0_0_40px_rgba(147,51,234,0.6)]">
+                            Watch Our Work
+                        </button>
+                    </Link>
                 </div>
             </div>
         </div>

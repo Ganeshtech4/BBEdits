@@ -33,8 +33,15 @@ export default function ScrollStackCards(): JSX.Element {
   });
 
   return (
-    <main className='bg-black dark:bg-[#030014] w-full overflow-visible relative pt-6 sm:pt-12 md:pt-16 lg:pt-20' ref={container} style={{ contain: 'layout style paint' }}>
-      <div className='text-white w-full bg-slate-950 pt-8'>
+    <main className='w-full overflow-visible relative' ref={container} style={{ contain: 'layout style paint' }}>
+      <div className='text-white w-full bg-slate-950 pt-8 sm:pt-12 md:pt-16 lg:pt-20'>
+        {/* Heading Section */}
+        <div className="text-center mb-2 sm:mb-3 md:mb-4 px-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white">
+            What You'll Learn
+          </h2>
+        </div>
+        
         {projects.map((project, i) => {
           const targetScale = 1 - (projects.length - i) * 0.05;
           return (
@@ -83,7 +90,7 @@ export const Card: React.FC<CardProps> = ({
   return (
     <div
       ref={container}
-      className='h-screen flex items-center justify-center sticky top-0 w-full overflow-hidden py-8 sm:py-10 md:py-12'
+      className='h-screen flex items-center justify-center sticky top-0 w-full overflow-hidden py-4 sm:py-6 md:py-8'
       style={{ contain: 'layout style paint', willChange: i < 2 ? 'transform' : 'auto' }}
     >
       <motion.div
@@ -95,7 +102,7 @@ export const Card: React.FC<CardProps> = ({
         className={`flex flex-col h-auto min-h-[500px] sm:min-h-[550px] md:h-[600px] w-[95%] sm:w-[90%] md:w-[85%] lg:w-[75%] xl:w-[70%] rounded-2xl sm:rounded-3xl pt-4 sm:pt-6 pb-6 sm:pb-8 md:pb-10 px-4 sm:px-6 md:px-8 
                     bg-gradient-to-br from-purple-900/20 via-purple-800/10 to-black/40 
                     backdrop-blur-md border border-purple-500/30 
-                    shadow-[0_0_40px_rgba(147,51,234,0.3)] 
+                    shadow-[0_0_25px_rgba(147,51,234,0.2)] 
                     origin-top overflow-hidden`}
       >
         <div className={`flex flex-col md:flex-row flex-1 gap-4 sm:gap-6 md:gap-8`}>

@@ -41,31 +41,34 @@ const WhoIsThisFor = () => {
                     <div className="h-[1px] bg-gray-700 flex-grow ml-2 sm:ml-3 md:ml-4"></div>
                 </div>
 
-                {/* Cards Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6 mb-8 sm:mb-12 md:mb-16">
-                    {steps.map((step, index) => (
-                        <InfoCard
-                            key={index}
-                            number={step.number}
-                            title={step.title}
-                            description={step.description}
-                        />
-                    ))}
-                </div>
+                {/* Centered Container for Cards and CTA */}
+                <div className="max-w-7xl mx-auto px-2 sm:px-4">
+                    {/* Cards Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6 mb-6 sm:mb-8 md:mb-10">
+                        {steps.map((step, index) => (
+                            <InfoCard
+                                key={index}
+                                number={step.number}
+                                title={step.title}
+                                description={step.description}
+                            />
+                        ))}
+                    </div>
 
-                {/* CTA Bar */}
-                <div className="w-full bg-[#2b2d66] rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 shadow-lg border border-white/5">
-                    <h3 className="text-white text-sm sm:text-base md:text-lg font-medium tracking-wide text-center sm:text-left">
-                        UPGRADE YOUR EDITING SKILLS NOW
-                    </h3>
-                    <Link href="/courses">
-                        <button className="bg-white text-[#2b2d66] px-5 sm:px-6 py-2 rounded-full font-semibold text-sm sm:text-base flex items-center gap-2 hover:bg-gray-100 transition-all group whitespace-nowrap">
-                            Start Now
-                            <div className="bg-[#2b2d66] rounded-full p-1 group-hover:translate-x-1 transition-transform duration-300">
-                                <ArrowRight size={14} className="text-white" />
-                            </div>
-                        </button>
-                    </Link>
+                    {/* CTA Bar */}
+                    <div className="bg-[#2b2d66] rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 shadow-lg border border-white/5">
+                        <h3 className="text-white text-sm sm:text-base md:text-lg font-medium tracking-wide text-center sm:text-left">
+                            UPGRADE YOUR EDITING SKILLS NOW
+                        </h3>
+                        <Link href="/courses">
+                            <button className="bg-white text-[#2b2d66] px-5 sm:px-6 py-2 rounded-full font-semibold text-sm sm:text-base flex items-center gap-2 hover:bg-gray-100 transition-all group whitespace-nowrap">
+                                Start Now
+                                <div className="bg-[#2b2d66] rounded-full p-1 group-hover:translate-x-1 transition-transform duration-300">
+                                    <ArrowRight size={14} className="text-white" />
+                                </div>
+                            </button>
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>

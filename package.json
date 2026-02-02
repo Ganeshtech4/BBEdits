@@ -15,6 +15,7 @@
   "author": "EC & SPM Project",
   "license": "ISC",
   "dependencies": {
+    "@studio-freight/lenis": "^1.0.42",
     "@types/bcryptjs": "^2.4.2",
     "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.13",

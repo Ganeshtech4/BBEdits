@@ -8,10 +8,12 @@ import OurWorks from "./components/OurWorks/OurWorks";
 import Courses from "./components/Route/Courses";
 import Reviews from "./components/Route/Reviews";
 import Footer from "./components/Footer";
-import ScrollStackCards from "./components/ScrollStackCards/ScrollStackCards";
 import AIFeatureSection from "./components/AIFeatureSection/AIFeatureSection";
+import ScrollStackCards from "./components/ScrollStackCards/ScrollStackCards";
 import VideoTestimonials from "./components/Testimonials/VideoTestimonials";
 import TextTestimonials from "./components/Testimonials/TextTestimonials";
+import SmoothScroll from "./components/SmoothScroll";
+import FAQ from "./components/FAQ/FAQ";
 
 interface Props { }
 
@@ -22,6 +24,7 @@ const Page: FC<Props> = (props) => {
 
   return (
     <>
+      <SmoothScroll />
       <Heading
         title="BBEdits"
         description="BBEdits is a platform for students to learn and get help from teachers"
@@ -44,6 +47,7 @@ const Page: FC<Props> = (props) => {
         <OurWorks />
         <VideoTestimonials />
         <TextTestimonials />
+        <FAQ />
         <Footer />
       </div>
     </>
