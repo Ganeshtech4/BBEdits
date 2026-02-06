@@ -99,7 +99,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
             <div
               className={`fixed top-4 left-1/2 -translate-x-1/2 h-[60px] z-[999] transition-all duration-300 rounded-full flex items-center justify-between px-4 border border-white/10 shadow-lg backdrop-blur-md
           ${active ? "bg-[#030014]/50 shadow-[0_0_20px_rgba(147,51,234,0.1)]" : "bg-[#030014]/30"}
-          w-[90%] max-w-[720px]
+          w-[90%] max-w-[900px]
         `}
             >
               {/* Logo */}

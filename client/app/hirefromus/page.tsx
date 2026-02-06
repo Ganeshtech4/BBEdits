@@ -2,22 +2,22 @@
 import React, { useState } from "react";
 import Heading from "../utils/Heading";
 import Header from "../components/Header";
+import HireFromUs from "../components/hirefromus/HireFromUs";
 import Footer from "../components/Footer";
-import Contact from "./Contact";
 
 type Props = {};
 
 const Page = (props: Props) => {
   const [open, setOpen] = useState(false);
-  const [activeItem, setActiveItem] = useState(5);
+  const [activeItem, setActiveItem] = useState(4);
   const [route, setRoute] = useState("Login");
 
   return (
-    <div className="min-h-screen">
+    <div>
       <Heading
-        title="Contact Us - BBEdits"
-        description="Get in touch with BBEdits. We're here to help you with your programming journey."
-        keywords="contact,support,help,bbedits"
+        title="Hire From Us - BBEdits"
+        description="Hire skilled video editors trained by industry experts. Access a curated pool of job-ready professionals with proven expertise."
+        keywords="video editing, hire editors, video production, creative talent"
       />
       <Header
         open={open}
@@ -26,8 +26,7 @@ const Page = (props: Props) => {
         setRoute={setRoute}
         route={route}
       />
-      <br />
-      <Contact />
+      <HireFromUs />
       <Footer />
     </div>
   );

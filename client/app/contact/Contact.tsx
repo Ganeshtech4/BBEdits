@@ -193,7 +193,7 @@ const Contact = (props: Props) => {
                         Phone
                       </h3>
                       <p className="text-[16px] font-Poppins opacity-80">
-                        +91 (XXX) XXX-XXXX
+                        +91 9515595970
                       </p>
                     </div>
                   </div>

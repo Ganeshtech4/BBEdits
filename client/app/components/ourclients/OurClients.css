@@ -1,0 +1,152 @@
+/* Our Clients Section */
+.our-clients-section {
+  width: 100%;
+  padding: 100px 20px;
+  background: linear-gradient(180deg, #000 0%, #0a0a0a 100%);
+}
+
+.our-clients-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.our-clients-title {
+  font-size: 3rem;
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #8543C7 0%, #37a39a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.our-clients-subtitle {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #888;
+  margin-bottom: 60px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Clients Grid */
+.clients-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  margin-bottom: 80px;
+}
+
+.client-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(133, 67, 199, 0.2);
+  border-radius: 16px;
+  padding: 40px 30px;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.client-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(133, 67, 199, 0.5);
+  box-shadow: 0 10px 40px rgba(133, 67, 199, 0.2);
+  background: rgba(133, 67, 199, 0.05);
+}
+
+.client-icon {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.client-icon svg {
+  filter: drop-shadow(0 0 10px rgba(133, 67, 199, 0.3));
+}
+
+.client-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.client-role {
+  font-size: 1rem;
+  color: #888;
+}
+
+/* Stats Section */
+.clients-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-top: 60px;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, rgba(133, 67, 199, 0.1) 0%, rgba(55, 163, 154, 0.1) 100%);
+  border: 1px solid rgba(133, 67, 199, 0.3);
+  border-radius: 16px;
+  padding: 40px 30px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: scale(1.05);
+  border-color: rgba(133, 67, 199, 0.6);
+  box-shadow: 0 10px 30px rgba(133, 67, 199, 0.3);
+}
+
+.stat-number {
+  font-size: 3rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #8543C7 0%, #37a39a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 10px;
+}
+
+.stat-label {
+  font-size: 1.1rem;
+  color: #aaa;
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .our-clients-section {
+    padding: 60px 20px;
+  }
+
+  .our-clients-title {
+    font-size: 2rem;
+  }
+
+  .our-clients-subtitle {
+    font-size: 1rem;
+  }
+
+  .clients-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .clients-stats {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .stat-number {
+    font-size: 2.5rem;
+  }
+
+  .client-name {
+    font-size: 1.3rem;
+  }
+}

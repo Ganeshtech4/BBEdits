@@ -19,6 +19,10 @@ export const navItemsData = [
     url: "/our-works",
   },
   {
+    name: "Hire From Us",
+    url: "/hirefromus",
+  },
+  {
     name: "Contact",
     url: "/contact",
   },
