@@ -12,6 +12,7 @@ import analyticsRouter from "./routes/analytics.route";
 import layoutRouter from "./routes/layout.route";
 import contactRouter from "./routes/contact.route";
 import couponRouter from "./routes/coupon.route";
+import bundleRouter from "./routes/bundle.route";
 import { rateLimit } from 'express-rate-limit'
 
 // body parser
@@ -54,7 +55,8 @@ app.use(
     analyticsRouter,
     layoutRouter,
     contactRouter,
-    couponRouter
+    couponRouter,
+    bundleRouter
 );
 
 // testing api

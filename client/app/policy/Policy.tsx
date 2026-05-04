@@ -197,7 +197,7 @@ const Policy = (props: Props) => {
               <p><strong>BBEDITS</strong></p>
               <p>📧 support@bbedits.in</p>
               <p>📧 contact@bbedits.in</p>
-              <p>📞 +91 9515595970</p>
+              <p>📞 +91 9110772715</p>
               <p>📍 Vizag, India</p>
             </div>
           </section>

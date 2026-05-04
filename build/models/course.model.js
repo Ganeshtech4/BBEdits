@@ -53,6 +53,10 @@ const courseDataSchema = new mongoose_1.Schema({
     links: [linkSchema],
     suggestion: String,
     questions: [commentSchema],
+    isLocked: {
+        type: Boolean,
+        default: false,
+    },
 });
 const courseSchema = new mongoose_1.Schema({
     name: {

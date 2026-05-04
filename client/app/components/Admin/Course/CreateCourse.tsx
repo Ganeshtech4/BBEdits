@@ -56,6 +56,7 @@ const CreateCourse = (props: Props) => {
         },
       ],
       suggestion: "",
+      isLocked: false,
     },
   ]);
 
@@ -86,6 +87,7 @@ const CreateCourse = (props: Props) => {
           url: link.url,
         })),
         suggestion: courseContent.suggestion,
+        isLocked: (courseContent as any).isLocked ?? false,
       })
     );
 

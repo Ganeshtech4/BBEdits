@@ -15,6 +15,7 @@ import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 
 export {
     HomeOutlinedIcon,
@@ -34,4 +35,5 @@ export {
   SettingsIcon,
   ExitToAppIcon,
   LocalOfferIcon,
+  LibraryBooksIcon,
 }

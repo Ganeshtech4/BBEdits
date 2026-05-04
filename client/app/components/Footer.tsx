@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import React from 'react'
-import { Youtube, Instagram, Github, Mail, MapPin, Phone } from 'lucide-react'
+import { Youtube, Instagram, Mail, MapPin, Phone } from 'lucide-react'
 
 const Footer = () => {
   return (
@@ -17,14 +17,11 @@ const Footer = () => {
               Empowering creators with AI-driven tools and professional video editing resources. Join the future of content creation.
             </p>
             <div className="flex gap-4 pt-4">
-              <Link href="https://www.youtube.com/channel/UCHz6Sne9splmvm-q2w1_HWQ" target="_blank" className="p-2 rounded-full bg-white/5 hover:bg-purple-600/20 hover:text-purple-400 transition-all duration-300">
+              <Link href="https://www.youtube.com/@BBEDITS4567" target="_blank" className="p-2 rounded-full bg-white/5 hover:bg-purple-600/20 hover:text-purple-400 transition-all duration-300">
                 <Youtube className="w-5 h-5" />
               </Link>
-              <Link href="https://www.instagram.com/shahriar_sajeeb_/" target="_blank" className="p-2 rounded-full bg-white/5 hover:bg-purple-600/20 hover:text-purple-400 transition-all duration-300">
+              <Link href="https://www.instagram.com/bb_edits00/" target="_blank" className="p-2 rounded-full bg-white/5 hover:bg-purple-600/20 hover:text-purple-400 transition-all duration-300">
                 <Instagram className="w-5 h-5" />
-              </Link>
-              <Link href="https://www.github.com/shahriarsajeeb" target="_blank" className="p-2 rounded-full bg-white/5 hover:bg-purple-600/20 hover:text-purple-400 transition-all duration-300">
-                <Github className="w-5 h-5" />
               </Link>
             </div>
           </div>
@@ -38,6 +35,12 @@ const Footer = () => {
               </li>
               <li>
                 <Link href="/about" className="hover:text-purple-400 transition-colors">About Us</Link>
+              </li>
+              <li>
+                <Link href="/our-works" className="hover:text-purple-400 transition-colors">Our Works</Link>
+              </li>
+              <li>
+                <Link href="/contact" className="hover:text-purple-400 transition-colors">Contact</Link>
               </li>
               <li>
                 <Link href="/policy" className="hover:text-purple-400 transition-colors">Privacy Policy</Link>
@@ -62,7 +65,7 @@ const Footer = () => {
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="w-5 h-5 text-purple-500" />
-                <a href="tel:+919515595970" className="hover:text-purple-400 transition-colors">+91 9515595970</a>
+                <a href="tel:+919110772715" className="hover:text-purple-400 transition-colors">+91 9110772715</a>
               </li>
             </ul>
           </div>

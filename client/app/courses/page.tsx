@@ -1,6 +1,8 @@
 "use client";
 import { useGetUsersAllCoursesQuery } from "@/redux/features/courses/coursesApi";
 import { useGetHeroDataQuery } from "@/redux/features/layout/layoutApi";
+import { useGetActiveBundlesQuery } from "@/redux/features/bundles/bundlesApi";
+import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState, Suspense } from "react";
 import Loader from "../components/Loader/Loader";
@@ -8,6 +10,7 @@ import Header from "../components/Header";
 import Heading from "../utils/Heading";
 import { styles } from "../styles/style";
 import CourseCard from "../components/Course/CourseCard";
+import BundleCard from "../components/Bundle/BundleCard";
 import Footer from "../components/Footer";
 
 type Props = {};
@@ -17,6 +20,8 @@ const CoursesContent = (props: Props) => {
   const search = searchParams?.get("title");
   const { data, isLoading } = useGetUsersAllCoursesQuery(undefined, {});
   const { data: categoriesData } = useGetHeroDataQuery("Categories", {});
+  const { data: bundlesData } = useGetActiveBundlesQuery({});
+  const { data: userData } = useLoadUserQuery(undefined, {});
   const [route, setRoute] = useState("Login");
   const [open, setOpen] = useState(false);
   const [courses, setcourses] = useState([]);
@@ -69,6 +74,30 @@ const CoursesContent = (props: Props) => {
                   <CourseCard item={item} key={index} />
                 ))}
             </div>
+
+            {/* Bundles Section */}
+            {bundlesData?.bundles?.length > 0 && (
+              <div className="mt-8 mb-16">
+                <div className="flex items-center gap-3 mb-6">
+                  <h2 className="text-2xl font-bold text-black dark:text-white">
+                    Course Bundles
+                  </h2>
+                  <span className="bg-purple-600 text-white text-xs px-2.5 py-1 rounded-full font-semibold">
+                    Save More
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px]">
+                  {bundlesData.bundles.map((bundle: any) => (
+                    <BundleCard
+                      key={bundle._id}
+                      bundle={bundle}
+                      setRoute={setRoute}
+                      setOpen={setOpen}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
           <Footer />
         </>

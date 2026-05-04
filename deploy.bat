@@ -1,99 +1,99 @@
 @echo off
 REM ============================================
 REM BBEdits Deployment Script (Windows)
-REM Build Locally, Deploy to Server
 REM ============================================
 
-REM Configuration - UPDATE THESE VALUES
 set SERVER_USER=root
-set SERVER_IP=your-server-ip
+set SERVER_IP=88.222.245.226
 set SERVER_PATH=/var/www/anilweb
-set APP_NAME=anilweb
+set SSH_KEY=/c/Users/Administrator/.ssh/id_ed25519_bbedits
+set BASH="C:\Program Files\Git\bin\bash.exe"
+set SSH_OPTS=-i "%SSH_KEY%" -o StrictHostKeyChecking=no -o ServerAliveInterval=30 -o ServerAliveCountMax=120
 
 echo.
 echo ========================================
-echo BBEdits Deployment Starting...
+echo  BBEdits Deployment Starting...
 echo ========================================
 echo.
 
-REM ============================================
-REM Step 1: Build Client (Next.js)
-REM ============================================
-echo [Step 1] Building client (Next.js)...
-cd client
-call npm run build
-if %errorlevel% neq 0 (
-    echo ERROR: Client build failed!
-    exit /b 1
+REM Step 1: Build Client
+if exist "client\.next" (
+    echo [Step 1] Client build exists - SKIPPING
+) else (
+    echo [Step 1] Building client...
+    cd client
+    call npm run build
+    if %errorlevel% neq 0 ( echo ERROR: Client build failed! & exit /b 1 )
+    cd ..
+    echo Client built OK
 )
-cd ..
-echo Client built successfully
 echo.
 
-REM ============================================
-REM Step 2: Build Server (TypeScript)
-REM ============================================
-echo [Step 2] Building server (TypeScript)...
-call npm run build
-if %errorlevel% neq 0 (
-    echo ERROR: Server build failed!
-    exit /b 1
+REM Step 2: Build Server
+if exist "build" (
+    echo [Step 2] Server build exists - SKIPPING
+) else (
+    echo [Step 2] Building server...
+    call npm run build
+    if %errorlevel% neq 0 ( echo ERROR: Server build failed! & exit /b 1 )
+    echo Server built OK
 )
-echo Server built successfully
 echo.
 
-REM ============================================
-REM Step 3: Transfer Files to Server
-REM ============================================
-echo [Step 3] Transferring files to server...
-echo NOTE: This requires SCP/rsync on Windows (Git Bash, WSL, or WinSCP)
-echo.
-echo Manual transfer instructions:
-echo 1. Use WinSCP or FileZilla to connect to %SERVER_IP%
-echo 2. Transfer these folders:
-echo    - client\.next\  to  %SERVER_PATH%/client/.next/
-echo    - build\  to  %SERVER_PATH%/build/
-echo    - mails\  to  %SERVER_PATH%/mails/
-echo 3. Transfer these files:
-echo    - package.json  to  %SERVER_PATH%/
-echo    - ecosystem.config.js  to  %SERVER_PATH%/
-echo    - client\package.json  to  %SERVER_PATH%/client/
-echo    - client\next.config.js  to  %SERVER_PATH%/client/
+REM Step 3: Pack archives with correct paths
+echo [Step 3] Packaging...
+
+if exist "client\.next\cache" rd /s /q "client\.next\cache"
+
+%BASH% -c "cd '/e/Work/Clients/bb/anilweb' && tar czf /tmp/deploy-client.tar.gz -C client .next package.json next.config.js && tar czf /tmp/deploy-server.tar.gz build mails package.json ecosystem.config.js && echo PACKED_OK"
+if %errorlevel% neq 0 ( echo ERROR: Packaging failed! & exit /b 1 )
+echo Packed OK
 echo.
 
-REM If you have Git Bash installed, uncomment these lines:
-REM bash -c "scp -r client/.next %SERVER_USER%@%SERVER_IP%:%SERVER_PATH%/client/"
-REM bash -c "scp -r build %SERVER_USER%@%SERVER_IP%:%SERVER_PATH%/"
-REM bash -c "scp -r mails %SERVER_USER%@%SERVER_IP%:%SERVER_PATH%/"
-REM bash -c "scp package.json ecosystem.config.js %SERVER_USER%@%SERVER_IP%:%SERVER_PATH%/"
-REM bash -c "scp client/package.json client/next.config.js %SERVER_USER%@%SERVER_IP%:%SERVER_PATH%/client/"
+REM Step 4: Upload via tmpfiles.org + server wget (bypasses SSH large-file crash)
+echo [Step 4] Uploading and deploying...
+%BASH% -c "
+  set -e
+  SSH_KEY=/c/Users/Administrator/.ssh/id_ed25519_bbedits
+  SSH=\"ssh -i \$SSH_KEY -o StrictHostKeyChecking=no\"
+  SERVER=root@88.222.245.226
 
-pause
-echo.
+  echo 'Uploading client build to tmpfiles.org...'
+  CLIENT_RAW=\$(curl -sF 'file=@/tmp/deploy-client.tar.gz' https://tmpfiles.org/api/v1/upload)
+  CLIENT_URL=\$(echo \"\$CLIENT_RAW\" | grep -o 'http[^\"]*' | sed 's|tmpfiles.org/|tmpfiles.org/dl/|')
+  [ -z \"\$CLIENT_URL\" ] && echo \"Upload failed: \$CLIENT_RAW\" && exit 1
+  echo \"Client URL: \$CLIENT_URL\"
 
-REM ============================================
-REM Step 4 & 5: Run commands on server via SSH
-REM ============================================
-echo [Step 4] Install dependencies and restart on server
-echo.
-echo Connect to your server and run:
-echo.
-echo   cd %SERVER_PATH%
-echo   npm install --production
-echo   cd client
-echo   npm install --production
-echo   cd ..
-echo   pm2 restart ecosystem.config.js --update-env
-echo   pm2 save
-echo   pm2 list
-echo.
+  echo 'Uploading server build to tmpfiles.org...'
+  SERVER_RAW=\$(curl -sF 'file=@/tmp/deploy-server.tar.gz' https://tmpfiles.org/api/v1/upload)
+  SERVER_URL=\$(echo \"\$SERVER_RAW\" | grep -o 'http[^\"]*' | sed 's|tmpfiles.org/|tmpfiles.org/dl/|')
+  [ -z \"\$SERVER_URL\" ] && echo \"Upload failed: \$SERVER_RAW\" && exit 1
+  echo \"Server URL: \$SERVER_URL\"
 
-pause
+  rm -f /tmp/deploy-client.tar.gz /tmp/deploy-server.tar.gz
+
+  echo 'Server downloading and deploying...'
+  \$SSH \$SERVER \"
+    set -e
+    cd /var/www/anilweb
+    wget -q '\$CLIENT_URL' -O /tmp/deploy-client.tar.gz
+    wget -q '\$SERVER_URL' -O /tmp/deploy-server.tar.gz
+    tar xzf /tmp/deploy-server.tar.gz
+    tar xzf /tmp/deploy-client.tar.gz -C client
+    rm -f /tmp/deploy-client.tar.gz /tmp/deploy-server.tar.gz
+    npm install --omit=dev --silent
+    cd client && npm install --omit=dev --silent && cd ..
+    pm2 restart ecosystem.config.js --update-env
+    pm2 save
+    pm2 list
+    echo DEPLOY_DONE
+  \"
+"
+if %errorlevel% neq 0 ( echo ERROR: Deployment failed! & exit /b 1 )
 
 echo.
 echo ========================================
-echo Deployment Complete!
+echo  Deployment Complete!
 echo ========================================
-echo.
-echo Check your application at: http://%SERVER_IP%
+echo Check: https://bbedits.in
 echo.

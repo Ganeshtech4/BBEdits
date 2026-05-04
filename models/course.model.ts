@@ -30,6 +30,7 @@ interface ICourseData extends Document {
   links: ILink[];
   suggestion: string;
   questions: IComment[];
+  isLocked?: boolean;
 }
 
  export interface ICourse extends Document {
@@ -82,6 +83,10 @@ const courseDataSchema = new Schema<ICourseData>({
   links: [linkSchema],
   suggestion: String,
   questions: [commentSchema],
+  isLocked: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const courseSchema = new Schema<ICourse>({

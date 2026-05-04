@@ -1,3 +1,5 @@
+﻿"use client";
+
 import { styles } from "@/app/styles/style";
 import CoursePlayer from "@/app/utils/CoursePlayer";
 import Link from "next/link";
@@ -12,7 +14,9 @@ import { VscVerifiedFilled } from "react-icons/vsc";
 import { useValidateCouponMutation } from "@/redux/features/coupons/couponsApi";
 import toast from "react-hot-toast";
 import { AiOutlineUnorderedList } from "react-icons/ai";
-import { FaInfinity } from "react-icons/fa";
+import { FaInfinity, FaChevronRight } from "react-icons/fa";
+import { MdOndemandVideo, MdLanguage } from "react-icons/md";
+import { BiSupport } from "react-icons/bi";
 import Ratings from "@/app/utils/Ratings";
 
 type Props = {
@@ -47,6 +51,14 @@ const CourseDetails = ({
     user && user?.courses?.find((item: any) => item._id === data._id || item.courseId === data._id);
 
   const finalPrice = appliedCoupon ? appliedCoupon.finalAmount : data.price;
+
+  // Calculate total duration
+  const totalDuration = data?.courseData?.reduce((acc: number, item: any) => {
+    return acc + (item.videoLength || 0);
+  }, 0) || 0;
+
+  const totalHours = Math.floor(totalDuration / 60);
+  const totalMinutes = Math.round(totalDuration % 60);
 
   const handleApplyCoupon = async () => {
     if (!couponCode.trim()) {
@@ -91,267 +103,268 @@ const CourseDetails = ({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-[#030014] to-black py-12">
-      <div className="w-[90%] 800px:w-[88%] max-w-[1600px] m-auto">
-        <div className="w-full flex flex-col-reverse 800px:flex-row gap-8">
-          {/* Left Content */}
-          <div className="w-full 800px:w-[65%] space-y-8">
-            {/* Course Header */}
-            <div className="bg-gradient-to-br from-purple-900/20 via-black/50 to-black/80 backdrop-blur-sm border border-purple-500/20 rounded-2xl p-8 shadow-[0_0_30px_rgba(147,51,234,0.15)]">
-              <h1 className="text-3xl md:text-5xl font-bold text-white mb-6">
+    <div className="min-h-screen bg-[#0F0A19]">
+      {/* Hero Section with Video - Purple gradient background */}
+      <div className="relative bg-gradient-to-br from-purple-900/30 via-[#1a0d2e] to-black border-b border-purple-500/10">
+        <div className="w-[90%] 800px:w-[85%] max-w-[1400px] m-auto py-8 pt-24">
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2 text-sm mb-6 text-gray-400">
+            <Link href="/courses" className="hover:text-purple-400 transition-colors">
+              Courses
+            </Link>
+            <FaChevronRight size={10} />
+            <span className="text-purple-400">{data?.categories || 'Video Editing'}</span>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Left: Course Info */}
+            <div className="lg:col-span-2">
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight">
                 {data.name}
               </h1>
-            </div>
+              
+              <p className="text-lg text-gray-300 mb-6 leading-relaxed">
+                {data.description?.substring(0, 150)}...
+              </p>
 
-            {/* What You'll Learn */}
-            <div className="bg-gradient-to-br from-purple-900/10 via-black/50 to-black/80 backdrop-blur-sm border border-purple-500/20 rounded-2xl p-8">
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 flex items-center gap-3">
-                <div className="w-1.5 h-10 bg-gradient-to-b from-purple-500 to-violet-600 rounded-full"></div>
-                What You'll Learn
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {data.benefits?.map((item: any, index: number) => (
-                  <div
-                    className="flex items-start gap-3 group hover:translate-x-1 transition-transform"
-                    key={index}
-                  >
-                    <div className="flex-shrink-0 w-7 h-7 rounded-full bg-gradient-to-r from-purple-600 to-violet-600 flex items-center justify-center mt-0.5 shadow-[0_0_15px_rgba(147,51,234,0.3)]">
-                      <IoCheckmarkDoneOutline
-                        size={18}
-                        className="text-white"
-                      />
-                    </div>
-                    <p className="text-gray-300 text-base group-hover:text-white transition-colors leading-relaxed">
-                      {item.title}
-                    </p>
+              <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400">
+                <div className="flex items-center gap-2">
+                  <MdLanguage className="text-purple-400" size={18} />
+                  <span>English</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MdOndemandVideo className="text-purple-400" size={18} />
+                  <span>{data?.courseData?.length || 0} lectures</span>
+                </div>
+                {totalDuration > 0 && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-purple-400">â±</span>
+                    <span>{totalHours}h {totalMinutes}m total</span>
                   </div>
-                ))}
+                )}
               </div>
             </div>
 
-            {/* Prerequisites */}
-            <div className="bg-gradient-to-br from-purple-900/10 via-black/50 to-black/80 backdrop-blur-sm border border-purple-500/20 rounded-2xl p-8">
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 flex items-center gap-3">
-                <div className="w-1.5 h-10 bg-gradient-to-b from-purple-500 to-violet-600 rounded-full"></div>
-                Prerequisites
-              </h2>
-              <div className="space-y-4">
-                {data.prerequisites?.map((item: any, index: number) => (
-                  <div className="flex items-start gap-3 group hover:translate-x-1 transition-transform" key={index}>
-                    <div className="flex-shrink-0 w-7 h-7 rounded-full bg-purple-900/50 border-2 border-purple-500/30 flex items-center justify-center mt-0.5">
-                      <IoCheckmarkDoneOutline
-                        size={16}
-                        className="text-purple-400"
-                      />
-                    </div>
-                    <p className="text-gray-300 text-base group-hover:text-white transition-colors">{item.title}</p>
+            {/* Video Preview removed from hero - will be in sidebar */}
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="w-[90%] 800px:w-[85%] max-w-[1400px] m-auto py-12 pb-24 lg:pb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Column - Course Content */}
+          <div className="lg:col-span-2 space-y-8 order-2 lg:order-1">
+            
+            {/* What You'll Learn */}
+            <div className="bg-gradient-to-br from-purple-900/20 via-black/40 to-black/60 backdrop-blur-sm border border-purple-500/30 rounded-xl p-8 shadow-lg">
+              <h2 className="text-2xl font-bold text-white mb-6">What you'll learn</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {data.benefits?.map((item: any, index: number) => (
+                  <div key={index} className="flex items-start gap-3">
+                    <IoCheckmarkDoneOutline size={20} className="text-purple-400 flex-shrink-0 mt-0.5" />
+                    <span className="text-gray-300 text-sm leading-relaxed">{item.title}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Course Content */}
-            <div className="bg-gradient-to-br from-purple-900/10 via-black/50 to-black/80 backdrop-blur-sm border border-purple-500/20 rounded-2xl p-8">
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 flex items-center gap-3">
-                <div className="w-1.5 h-10 bg-gradient-to-b from-purple-500 to-violet-600 rounded-full"></div>
-                Course Content
-              </h2>
+            <div className="bg-gradient-to-br from-purple-900/20 via-black/40 to-black/60 backdrop-blur-sm border border-purple-500/30 rounded-xl p-8 shadow-lg">
+              <div className="mb-6">
+                <div className="flex items-center justify-between mb-2">
+                  <h2 className="text-2xl font-bold text-white">Course content</h2>
+                </div>
+                <div className="flex items-center gap-3 text-sm text-gray-400">
+                  <span>{data?.courseData?.length || 0} sections</span>
+                  <span>•</span>
+                  <span>{data?.courseData?.reduce((acc: number) => acc + 1, 0)} lectures</span>
+                  {totalDuration > 0 && (
+                    <>
+                      <span>•</span>
+                      <span>{totalHours}h {totalMinutes}m total length</span>
+                    </>
+                  )}
+                </div>
+              </div>
               <CourseContentList data={data?.courseData} isDemo={true} />
             </div>
 
-            {/* Course Description */}
-            <div className="bg-gradient-to-br from-purple-900/10 via-black/50 to-black/80 backdrop-blur-sm border border-purple-500/20 rounded-2xl p-8">
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 flex items-center gap-3">
-                <div className="w-1.5 h-10 bg-gradient-to-b from-purple-500 to-violet-600 rounded-full"></div>
-                About This Course
-              </h2>
-              <p className="text-gray-300 text-lg leading-relaxed whitespace-pre-line">
+            {/* Requirements */}
+            {data.prerequisites && data.prerequisites.length > 0 && (
+              <div className="bg-gradient-to-br from-purple-900/20 via-black/40 to-black/60 backdrop-blur-sm border border-purple-500/30 rounded-xl p-8 shadow-lg">
+                <h2 className="text-2xl font-bold text-white mb-4">Requirements</h2>
+                <ul className="space-y-2">
+                  {data.prerequisites.map((item: any, index: number) => (
+                    <li key={index} className="flex items-start gap-3 text-gray-300">
+                      <span className="text-purple-400 mt-1">•</span>
+                      <span className="text-sm">{item.title}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Description */}
+            <div className="bg-gradient-to-br from-purple-900/20 via-black/40 to-black/60 backdrop-blur-sm border border-purple-500/30 rounded-xl p-8 shadow-lg">
+              <h2 className="text-2xl font-bold text-white mb-4">Description</h2>
+              <div className="text-gray-300 text-sm leading-relaxed whitespace-pre-line">
                 {data.description}
-              </p>
+              </div>
             </div>
 
-            {/* Reviews Section */}
-            <div className="bg-gradient-to-br from-purple-900/10 via-black/50 to-black/80 backdrop-blur-sm border border-purple-500/20 rounded-2xl p-8">
-              <div className="flex flex-wrap items-center gap-4 mb-8">
-                <Ratings rating={data?.ratings} />
-                <h2 className="text-2xl md:text-3xl font-bold text-white">
-                  {Number.isInteger(data?.ratings)
-                    ? data?.ratings.toFixed(1)
-                    : data?.ratings.toFixed(2)}
-                </h2>
-                <span className="text-gray-400 text-lg">• {data?.reviews?.length} Reviews</span>
-              </div>
-              <div className="space-y-6">
-                {(data?.reviews && [...data.reviews].reverse()).map(
-                  (item: any, index: number) => (
-                    <div className="bg-black/30 border border-purple-500/10 rounded-xl p-6 hover:border-purple-500/30 hover:bg-black/40 transition-all" key={index}>
+            {/* Reviews */}
+            {data?.reviews && data.reviews.length > 0 && (
+              <div className="bg-gradient-to-br from-purple-900/20 via-black/40 to-black/60 backdrop-blur-sm border border-purple-500/30 rounded-xl p-8 shadow-lg">
+                <h2 className="text-2xl font-bold text-white mb-6">Student feedback</h2>
+                <div className="space-y-6">
+                  {[...data.reviews].reverse().map((item: any, index: number) => (
+                    <div key={index} className="border-b border-purple-500/20 last:border-0 pb-6 last:pb-0">
                       <div className="flex gap-4">
-                        <div className="w-14 h-14 flex-shrink-0">
-                          <Image
-                            src={
-                              item.user.avatar
-                                ? item.user.avatar.url
-                                : "https://res.cloudinary.com/dshp9jnuy/image/upload/v1665822253/avatars/nrxsg8sd9iy10bbsoenn.png"
-                            }
-                            width={56}
-                            height={56}
-                            alt=""
-                            className="w-14 h-14 rounded-full object-cover border-2 border-purple-500/30"
-                          />
-                        </div>
+                        <Image
+                          src={item.user.avatar?.url || "https://res.cloudinary.com/dshp9jnuy/image/upload/v1665822253/avatars/nrxsg8sd9iy10bbsoenn.png"}
+                          width={48}
+                          height={48}
+                          alt={item.user.name}
+                          className="w-12 h-12 rounded-full object-cover"
+                        />
                         <div className="flex-1">
-                          <div className="flex flex-wrap items-center gap-3 mb-3">
-                            <h5 className="text-lg font-semibold text-white">
-                              {item.user.name}
-                            </h5>
-                            <Ratings rating={item.rating} />
+                          <div className="flex items-center gap-3 mb-2">
+                            <h5 className="font-semibold text-white">{item.user.name}</h5>
                           </div>
-                          <p className="text-gray-300 leading-relaxed mb-2">{item.comment}</p>
-                          <small className="text-gray-500">
-                            {format(item.createdAt)}
-                          </small>
+                          <p className="text-gray-300 text-sm mb-1">{item.comment}</p>
+                          <span className="text-xs text-gray-500">{format(item.createdAt)}</span>
+                          
+                          {item.commentReplies?.map((reply: any, idx: number) => (
+                            <div key={idx} className="mt-4 ml-4 pl-4 border-l-2 border-purple-500/30 bg-purple-900/20 p-3 rounded">
+                              <div className="flex items-center gap-2 mb-1">
+                                <Image
+                                  src={reply.user.avatar?.url || "https://res.cloudinary.com/dshp9jnuy/image/upload/v1665822253/avatars/nrxsg8sd9iy10bbsoenn.png"}
+                                  width={32}
+                                  height={32}
+                                  alt={reply.user.name}
+                                  className="w-8 h-8 rounded-full object-cover"
+                                />
+                                <h6 className="font-semibold text-sm text-white">{reply.user.name}</h6>
+                                <VscVerifiedFilled className="text-purple-400" size={14} />
+                              </div>
+                              <p className="text-sm text-gray-300">{reply.comment}</p>
+                              <span className="text-xs text-gray-500">{format(reply.createdAt)}</span>
+                            </div>
+                          ))}
                         </div>
                       </div>
-                      {item.commentReplies.map((i: any, idx: number) => (
-                        <div className="flex gap-4 ml-0 800px:ml-16 mt-6 bg-purple-900/10 rounded-lg p-4" key={idx}>
-                          <div className="w-12 h-12 flex-shrink-0">
-                            <Image
-                              src={
-                                i.user.avatar
-                                  ? i.user.avatar.url
-                                  : "https://res.cloudinary.com/dshp9jnuy/image/upload/v1665822253/avatars/nrxsg8sd9iy10bbsoenn.png"
-                              }
-                              width={48}
-                              height={48}
-                              alt=""
-                              className="w-12 h-12 rounded-full object-cover border-2 border-purple-500/30"
-                            />
-                          </div>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-2">
-                              <h5 className="text-base font-semibold text-white">{i.user.name}</h5>
-                              <VscVerifiedFilled className="text-blue-500 text-lg" />
-                            </div>
-                            <p className="text-gray-300 text-sm">{i.comment}</p>
-                            <small className="text-gray-500 text-xs">
-                              {format(i.createdAt)}
-                            </small>
-                          </div>
-                        </div>
-                      ))}
                     </div>
-                  )
-                )}
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
-          {/* Right Sidebar - Sticky */}
-          <div className="w-full 800px:w-[35%]">
-            <div className="sticky top-24 space-y-6">
+          {/* Right Sidebar - Scrollable */}
+          <div className="lg:col-span-1 order-1 lg:order-2">
+            {/* Sticky wrapper for desktop */}
+            <div className="lg:sticky lg:top-24 space-y-4">
               {/* Video Player */}
-              <div className="bg-gradient-to-br from-purple-900/20 via-black/50 to-black/80 backdrop-blur-sm border border-purple-500/20 rounded-2xl overflow-hidden shadow-[0_0_40px_rgba(147,51,234,0.2)]">
+              <div className="bg-black rounded-xl overflow-hidden shadow-2xl border border-purple-500/30">
                 <CoursePlayer videoUrl={data?.demoUrl} title={data?.title} />
-                
-                {/* Pricing Section */}
-                <div className="p-6">
-                  <div className="flex items-baseline gap-3 mb-4">
-                    <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-violet-600">
-                      {data.price === 0 ? "Free" : `₹${data.price}`}
-                    </h1>
-                    {data.price > 0 && data.estimatedPrice > data.price && (
-                      <>
-                        <h5 className="text-xl line-through text-gray-500">
-                          ₹{data.estimatedPrice}
-                        </h5>
-                        <span className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-3 py-1 rounded-full text-sm font-bold">
-                          {discountPercentengePrice}% OFF
-                        </span>
-                      </>
-                    )}
-                  </div>
+              </div>
 
-                  {/* Coupon Section */}
-                  {!isPurchased && data.price > 0 && (
-                    <div className="mb-6">
-                      {!appliedCoupon ? (
-                        <div className="flex items-center gap-2">
-                          <input
-                            type="text"
-                            placeholder="Enter coupon code"
-                            value={couponCode}
-                            onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                            className="flex-1 px-4 py-3 border border-purple-500/30 rounded-lg bg-black/30 text-white outline-none focus:border-purple-500 transition-colors"
-                          />
+              {/* Pricing Card */}
+              <div className="bg-gradient-to-br from-purple-900/20 via-black/40 to-black/60 backdrop-blur-sm border border-purple-500/30 rounded-xl p-6 shadow-lg">
+                <div className="flex items-baseline gap-3 mb-4">
+                  <h1 className="text-4xl font-bold text-white">
+                    {data.price === 0 ? "Free" : `₹${data.price}`}
+                  </h1>
+                  {data.price > 0 && data.estimatedPrice > data.price && (
+                    <>
+                      <span className="text-lg line-through text-gray-500">₹{data.estimatedPrice}</span>
+                      <span className="bg-green-600 text-white px-2 py-1 rounded text-sm font-bold">
+                        {discountPercentengePrice}% off
+                      </span>
+                    </>
+                  )}
+                </div>
+
+                {/* Coupon */}
+                {!isPurchased && data.price > 0 && (
+                  <div className="mb-4">
+                    {!appliedCoupon ? (
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          placeholder="Enter coupon code"
+                          value={couponCode}
+                          onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                          className="flex-1 px-4 py-2.5 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-white placeholder-gray-500"
+                        />
+                        <button
+                          onClick={handleApplyCoupon}
+                          disabled={isApplyingCoupon}
+                          className="px-5 py-2.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 font-medium transition-colors"
+                        >
+                          {isApplyingCoupon ? "..." : "Apply"}
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="bg-green-50 border border-green-200 p-4 rounded-lg">
+                        <div className="flex justify-between items-start mb-2">
+                          <div>
+                            <p className="text-sm text-green-700 font-medium">
+                              Coupon: {appliedCoupon.code}
+                            </p>
+                            <p className="text-sm text-green-600">
+                              Saved: â‚¹{appliedCoupon.discountAmount.toFixed(2)}
+                            </p>
+                          </div>
                           <button
-                            onClick={handleApplyCoupon}
-                            disabled={isApplyingCoupon}
-                            className="px-5 py-3 bg-gradient-to-r from-purple-600 to-violet-600 text-white rounded-lg hover:from-purple-700 hover:to-violet-700 disabled:opacity-50 font-semibold transition-all shadow-[0_0_20px_rgba(147,51,234,0.3)]"
+                            onClick={handleRemoveCoupon}
+                            className="text-red-600 hover:text-red-700 text-sm font-medium"
                           >
-                            {isApplyingCoupon ? "..." : "Apply"}
+                            Remove
                           </button>
                         </div>
-                      ) : (
-                        <div className="bg-gradient-to-r from-green-900/30 to-emerald-900/30 border border-green-500/30 p-4 rounded-lg">
-                          <div className="flex justify-between items-start">
-                            <div className="flex-1">
-                              <p className="text-sm text-green-400 mb-1">
-                                Coupon Applied: <strong className="text-green-300">{appliedCoupon.code}</strong>
-                              </p>
-                              <p className="text-lg font-semibold text-green-300">
-                                Discount: ₹{appliedCoupon.discountAmount.toFixed(2)}
-                              </p>
-                              <p className="text-2xl font-bold text-green-200">
-                                Final Price: ₹{appliedCoupon.finalAmount.toFixed(2)}
-                              </p>
-                            </div>
-                            <button
-                              onClick={handleRemoveCoupon}
-                              className="text-red-400 hover:text-red-300 text-sm font-semibold"
-                            >
-                              Remove
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                        <p className="text-lg font-bold text-green-700">
+                          Final: â‚¹{appliedCoupon.finalAmount.toFixed(2)}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
 
-                  {/* CTA Button */}
+                {/* CTA Button - Hidden on mobile, shown in fixed bottom */}
+                <div className="hidden lg:block">
                   {isPurchased ? (
                     <Link
-                      className="block w-full py-4 text-center bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white rounded-xl font-bold text-lg transition-all shadow-[0_0_30px_rgba(220,38,38,0.4)] hover:shadow-[0_0_40px_rgba(220,38,38,0.6)] hover:scale-105"
                       href={`/course-access/${data._id}`}
+                      className="block w-full py-3.5 text-center bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-bold text-base transition-colors shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50"
                     >
-                      Enter to Course
+                      Go to course
                     </Link>
                   ) : (
                     <button
-                      className="w-full py-4 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white rounded-xl font-bold text-lg transition-all shadow-[0_0_30px_rgba(147,51,234,0.4)] hover:shadow-[0_0_40px_rgba(147,51,234,0.6)] hover:scale-105"
                       onClick={handleOrder}
+                      className="w-full py-3.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-bold text-base transition-colors shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50"
                     >
-                      Buy Now ₹{finalPrice}
+                      {data.price === 0 ? "Enroll Now" : `Buy now for ₹${finalPrice}`}
                     </button>
                   )}
+                </div>
 
-                  {/* Course Includes */}
-                  <div className="mt-6 pt-6 border-t border-purple-500/20 space-y-3">
-                    <h3 className="text-white font-semibold text-lg mb-4">This course includes:</h3>
-                    <div className="flex items-center gap-3 text-gray-300">
-                      <AiOutlineUnorderedList className="text-purple-400" size={20} />
-                      <span>{data.courseData?.length || 0} Video Lectures</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-gray-300">
-                      <FaInfinity className="text-purple-400" size={20} />
-                      <span>Full lifetime access</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-gray-300">
-                      <svg className="text-purple-400" width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z"/>
-                        <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"/>
-                      </svg>
-                      <span>Premium Support</span>
-                    </div>
+                {/* Course Includes */}
+                <div className="mt-6 pt-6 border-t border-purple-500/30 space-y-3">
+                  <h4 className="font-bold text-white text-sm mb-3">This course includes:</h4>
+                  <div className="flex items-center gap-3 text-gray-300 text-sm">
+                    <MdOndemandVideo size={20} className="text-purple-400" />
+                    <span>{data.courseData?.length || 0} on-demand videos</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-gray-300 text-sm">
+                    <FaInfinity size={20} className="text-purple-400" />
+                    <span>Full lifetime access</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-gray-300 text-sm">
+                    <BiSupport size={20} className="text-purple-400" />
+                    <span>Premium Support</span>
                   </div>
                 </div>
               </div>
@@ -360,19 +373,44 @@ const CourseDetails = ({
         </div>
       </div>
 
-      {/* Razorpay Modal */}
+      {/* Fixed Bottom Button - Mobile Only */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-gradient-to-t from-black via-[#0F0A19] to-transparent border-t border-purple-500/30 p-4 z-40">
+        <div className="w-full max-w-md mx-auto">
+          {isPurchased ? (
+            <Link
+              href={`/course-access/${data._id}`}
+              className="block w-full py-4 text-center bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-bold text-lg transition-colors shadow-lg shadow-purple-500/30"
+            >
+              Go to course
+            </Link>
+          ) : (
+            <button
+              onClick={handleOrder}
+              className="w-full py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-bold text-lg transition-colors shadow-lg shadow-purple-500/30"
+            >
+              {data.price === 0 ? "Enroll Now" : `Buy now for ₹${finalPrice}`}
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Payment Modal */}
       {open && (
-        <div className="w-full h-screen bg-black/80 backdrop-blur-sm fixed top-0 left-0 z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-lg bg-gradient-to-br from-purple-900/40 via-black/90 to-black/90 backdrop-blur-xl rounded-2xl shadow-[0_0_50px_rgba(147,51,234,0.3)] border border-purple-500/30 p-6">
-            <div className="w-full flex justify-end mb-4">
-              <button
-                onClick={() => setOpen(false)}
-                className="text-gray-400 hover:text-white transition-colors"
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+          <div className="bg-gradient-to-br from-[#1a0d2e] via-black to-[#0F0A19] border border-purple-500/30 rounded-2xl shadow-2xl shadow-purple-500/20 max-w-lg w-full overflow-hidden">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-purple-600/20 to-violet-600/20 border-b border-purple-500/30 px-6 py-4 flex items-center justify-between">
+              <h3 className="text-xl font-bold text-white">Complete Your Purchase</h3>
+              <button 
+                onClick={() => setOpen(false)} 
+                className="text-gray-400 hover:text-white transition-colors p-1 hover:bg-purple-500/20 rounded-lg"
               >
-                <IoCloseOutline size={32} />
+                <IoCloseOutline size={28} />
               </button>
             </div>
-            <div className="w-full">
+            
+            {/* Content */}
+            <div className="p-6">
               <RazorpayCheckout 
                 setOpen={setOpen} 
                 data={data} 

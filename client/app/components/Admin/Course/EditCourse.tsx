@@ -120,6 +120,7 @@ const EditCourse:FC<Props> = ({id}) => {
           url: link.url,
         })),
         suggestion: courseContent.suggestion,
+        isLocked: (courseContent as any).isLocked ?? false,
       })
     );
 

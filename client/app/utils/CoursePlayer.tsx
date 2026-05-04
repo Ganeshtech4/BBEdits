@@ -6,169 +6,174 @@ type Props = {
   title: string;
 };
 
+const iframeStyle: React.CSSProperties = {
+  position: "absolute",
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+  border: 0,
+};
+
 const CoursePlayer: FC<Props> = ({ videoUrl }) => {
-  const [videoData, setVideoData] = useState({
-    otp: "",
-    playbackInfo: "",
-  });
+  const [videoData, setVideoData] = useState({ otp: "", playbackInfo: "" });
   const [isYouTube, setIsYouTube] = useState(false);
   const [youtubeVideoId, setYoutubeVideoId] = useState("");
   const [isBunny, setIsBunny] = useState(false);
   const [bunnyEmbedUrl, setBunnyEmbedUrl] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const playerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!videoUrl) return;
+    // Reset all state when the video URL changes to avoid stale content / white screen
+    setIsLoading(true);
+    setVideoData({ otp: "", playbackInfo: "" });
+    setIsYouTube(false);
+    setYoutubeVideoId("");
+    setIsBunny(false);
+    setBunnyEmbedUrl("");
 
-    // Check if it's a Bunny.net URL
-    const bunnyRegex = /(?:iframe\.)?mediadelivery\.net\/(?:embed|play)\/(\d+)\/([a-f0-9-]+)/i;
-    const bunnyMatch = videoUrl.match(bunnyRegex);
-    
-    if (bunnyMatch) {
-      setIsBunny(true);
-      // If it's already an embed URL, use it directly; otherwise construct the embed URL
-      if (videoUrl.includes('iframe.mediadelivery.net')) {
-        setBunnyEmbedUrl(videoUrl);
-      } else {
-        const libraryId = bunnyMatch[1];
-        const videoId = bunnyMatch[2];
-        setBunnyEmbedUrl(`https://iframe.mediadelivery.net/embed/${libraryId}/${videoId}`);
-      }
+    if (!videoUrl) {
+      setIsLoading(false);
       return;
     }
 
-    // Check if it's a YouTube URL
-    const youtubeRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/;
-    const match = videoUrl.match(youtubeRegex);
-    
-    if (match && match[1]) {
-      setIsYouTube(true);
-      setYoutubeVideoId(match[1]);
-    } else {
-      // VdoCipher video
-      setIsYouTube(false);
-      setIsBunny(false);
-      axios
-        .post(`${process.env.NEXT_PUBLIC_SERVER_URI}/api/v1/getVdoCipherOTP`, {
-          videoId: videoUrl,
-        })
-        .then((res) => {
-          setVideoData(res.data);
-        })
-        .catch((err) => {
-          console.error("Failed to load video:", err);
-        });
+    // Bunny.net
+    const bunnyRegex = /(?:iframe\.)?mediadelivery\.net\/(?:embed|play)\/(\d+)\/([a-f0-9-]+)/i;
+    const bunnyMatch = videoUrl.match(bunnyRegex);
+    if (bunnyMatch) {
+      const embedUrl = videoUrl.includes("iframe.mediadelivery.net")
+        ? videoUrl
+        : `https://iframe.mediadelivery.net/embed/${bunnyMatch[1]}/${bunnyMatch[2]}`;
+      setBunnyEmbedUrl(embedUrl);
+      setIsBunny(true);
+      // isLoading cleared by onLoad
+      return;
     }
+
+    // YouTube
+    const youtubeRegex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/;
+    const ytMatch = videoUrl.match(youtubeRegex);
+    if (ytMatch && ytMatch[1]) {
+      setYoutubeVideoId(ytMatch[1]);
+      setIsYouTube(true);
+      // isLoading cleared by onLoad
+      return;
+    }
+
+    // VdoCipher
+    axios
+      .post(`${process.env.NEXT_PUBLIC_SERVER_URI}/api/v1/getVdoCipherOTP`, {
+        videoId: videoUrl,
+      })
+      .then((res) => {
+        setVideoData(res.data);
+        // isLoading cleared by onLoad
+      })
+      .catch((err) => {
+        console.error("Failed to load video:", err);
+        setIsLoading(false);
+      });
   }, [videoUrl]);
 
-  // Add security event listeners
+  // Security: block context-menu / drag / select on the player wrapper
   useEffect(() => {
-    const handleContextMenu = (e: MouseEvent) => {
-      e.preventDefault();
-      return false;
-    };
-
-    const handleDragStart = (e: DragEvent) => {
-      e.preventDefault();
-      return false;
-    };
-
-    const handleSelectStart = (e: Event) => {
-      e.preventDefault();
-      return false;
-    };
-
-    const playerElement = playerRef.current;
-    if (playerElement) {
-      playerElement.addEventListener('contextmenu', handleContextMenu as any);
-      playerElement.addEventListener('dragstart', handleDragStart as any);
-      playerElement.addEventListener('selectstart', handleSelectStart as any);
-    }
-
+    const prevent = (e: Event) => e.preventDefault();
+    const el = playerRef.current;
+    if (!el) return;
+    el.addEventListener("contextmenu", prevent);
+    el.addEventListener("dragstart", prevent);
+    el.addEventListener("selectstart", prevent);
     return () => {
-      if (playerElement) {
-        playerElement.removeEventListener('contextmenu', handleContextMenu as any);
-        playerElement.removeEventListener('dragstart', handleDragStart as any);
-        playerElement.removeEventListener('selectstart', handleSelectStart as any);
-      }
+      el.removeEventListener("contextmenu", prevent);
+      el.removeEventListener("dragstart", prevent);
+      el.removeEventListener("selectstart", prevent);
     };
   }, []);
 
   return (
     <div
       ref={playerRef}
-      style={{ 
-        position: "relative", 
-        paddingTop: "56.25%", 
+      style={{
+        position: "relative",
+        paddingTop: "56.25%",
         overflow: "hidden",
+        // Black background prevents white flash while the iframe loads
+        backgroundColor: "#000",
+        // Force GPU compositing layer — fixes iOS Safari blank/white rendering
+        WebkitTransform: "translateZ(0)",
+        transform: "translateZ(0)",
         userSelect: "none",
         WebkitUserSelect: "none",
-        MozUserSelect: "none",
-        msUserSelect: "none"
+        MozUserSelect: "none" as any,
       }}
       onContextMenu={(e) => e.preventDefault()}
     >
+      {/* Loading skeleton shown until the iframe fires onLoad */}
+      {isLoading && (
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: "linear-gradient(135deg, #0f0f1a 0%, #1a0a2e 100%)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 2,
+          }}
+        >
+          <div style={{ textAlign: "center", color: "#666" }}>
+            <div
+              style={{
+                width: 40,
+                height: 40,
+                border: "3px solid #333",
+                borderTop: "3px solid #7c3aed",
+                borderRadius: "50%",
+                animation: "spin 0.8s linear infinite",
+                margin: "0 auto 12px",
+              }}
+            />
+            <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+            <span style={{ fontSize: 13 }}>Loading video…</span>
+          </div>
+        </div>
+      )}
+
       {isBunny && bunnyEmbedUrl ? (
         <iframe
+          key={bunnyEmbedUrl}
+          // NOTE: No `sandbox` attribute — iOS Safari blocks MSE/EME inside sandboxed iframes,
+          //       which prevents Bunny's player from initialising at all.
+          // NOTE: No `referrerPolicy="no-referrer"` — Bunny CDN needs the origin header to
+          //       validate the embed token; stripping it causes auth failures on iOS.
           src={`${bunnyEmbedUrl}?autoplay=false&preload=true&responsive=true`}
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            border: 0,
-            pointerEvents: "auto"
-          }}
+          style={iframeStyle}
           allowFullScreen={true}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          loading="lazy"
-          referrerPolicy="no-referrer"
-          sandbox="allow-scripts allow-same-origin allow-presentation"
-        ></iframe>
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+          onLoad={() => setIsLoading(false)}
+        />
       ) : isYouTube && youtubeVideoId ? (
         <iframe
-          src={`https://www.youtube.com/embed/${youtubeVideoId}?rel=0&modestbranding=1&disablekb=1`}
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            border: 0,
-          }}
+          key={youtubeVideoId}
+          // playsinline=1 is required for iOS — without it Safari opens a native full-screen
+          // player and the embed appears blank until the user taps
+          src={`https://www.youtube.com/embed/${youtubeVideoId}?rel=0&modestbranding=1&disablekb=1&playsinline=1`}
+          style={iframeStyle}
           allowFullScreen={true}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        ></iframe>
-      ) : (
-        videoData.otp && videoData.playbackInfo !== "" && (
-          <iframe
-            src={`https://player.vdocipher.com/v2/?otp=${videoData?.otp}&playbackInfo=${videoData.playbackInfo}&player=3thUX4gz2Z2U5DvN`}
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              border: 0,
-            }}
-            allowFullScreen={true}
-            allow="encrypted-media"
-          ></iframe>
-        )
-      )}
-      {/* Overlay to prevent inspect element on video */}
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          pointerEvents: "none",
-          zIndex: 1
-        }}
-      ></div>
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          onLoad={() => setIsLoading(false)}
+        />
+      ) : videoData.otp && videoData.playbackInfo ? (
+        <iframe
+          key={videoData.otp}
+          src={`https://player.vdocipher.com/v2/?otp=${videoData.otp}&playbackInfo=${videoData.playbackInfo}&player=3thUX4gz2Z2U5DvN`}
+          style={iframeStyle}
+          allowFullScreen={true}
+          allow="encrypted-media; fullscreen"
+          onLoad={() => setIsLoading(false)}
+        />
+      ) : null}
     </div>
   );
 };

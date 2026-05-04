@@ -49,7 +49,7 @@ const Terms = (props: Props) => {
               Subject to your compliance with these Legal Terms, we grant you a non-exclusive, non-transferable, revocable license to access the Services and download or print a copy of any portion of the Content to which you have properly gained access, solely for your personal, non-commercial use.
             </p>
             <p className="text-[15px] font-Poppins leading-7 mt-3">
-              If you wish to make any use of the Services, Content, or Marks other than as set out in this section, please contact us at <a href="mailto:support@bbedits.in" className="text-blue-600 dark:text-blue-400">support@bbedits.in</a> or <a href="tel:+919515595970" className="text-blue-600 dark:text-blue-400">+91 9515595970</a>.
+              If you wish to make any use of the Services, Content, or Marks other than as set out in this section, please contact us at <a href="mailto:support@bbedits.in" className="text-blue-600 dark:text-blue-400">support@bbedits.in</a> or <a href="tel:+919110772715" className="text-blue-600 dark:text-blue-400">+91 9110772715</a>.
             </p>
           </section>
 
@@ -290,7 +290,7 @@ const Terms = (props: Props) => {
               <p><strong>BBEdits</strong></p>
               <p>📧 <a href="mailto:support@bbedits.in" className="text-blue-600 dark:text-blue-400">support@bbedits.in</a></p>
               <p>📧 <a href="mailto:contact@bbedits.in" className="text-blue-600 dark:text-blue-400">contact@bbedits.in</a></p>
-              <p>📞 <a href="tel:+919515595970" className="text-blue-600 dark:text-blue-400">+91 9515595970</a></p>
+              <p>📞 <a href="tel:+919110772715" className="text-blue-600 dark:text-blue-400">+91 9110772715</a></p>
               <p>📍 Vizag, India</p>
             </div>
           </section>

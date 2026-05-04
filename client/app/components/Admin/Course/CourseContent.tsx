@@ -4,6 +4,7 @@ import { toast } from "react-hot-toast";
 import { AiOutlineDelete, AiOutlinePlusCircle } from "react-icons/ai";
 import { BsLink45Deg, BsPencil } from "react-icons/bs";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import { HiOutlineLockClosed, HiOutlineLockOpen } from "react-icons/hi";
 
 type Props = {
   active: number;
@@ -77,6 +78,7 @@ const CourseContent: FC<Props> = ({
         videoSection: newVideoSection,
         videoLength: "",
         links: [{ title: "", url: "" }],
+        isLocked: false,
       };
 
       const updatedData = [...courseContentData];
@@ -108,6 +110,7 @@ const CourseContent: FC<Props> = ({
         videoLength: "",
         videoSection: `Untitled Section ${activeSection}`,
         links: [{ title: "", url: "" }],
+        isLocked: false,
       };
 
       const updatedData = [...courseContentData];
@@ -203,6 +206,21 @@ const CourseContent: FC<Props> = ({
 
                   {/* // arrow button for collasped video content */}
                   <div className="flex items-center">
+                    <button
+                      type="button"
+                      title={item.isLocked ? "Unlock video" : "Lock video"}
+                      className={`mr-2 transition-colors ${item.isLocked ? 'text-red-400 hover:text-red-300' : 'text-gray-400 hover:text-white'}`}
+                      onClick={() => {
+                        const updatedData = [...courseContentData];
+                        updatedData[index].isLocked = !updatedData[index].isLocked;
+                        setCourseContentData(updatedData);
+                      }}
+                    >
+                      {item.isLocked
+                        ? <HiOutlineLockClosed className="text-[20px]" />
+                        : <HiOutlineLockOpen className="text-[20px]" />
+                      }
+                    </button>
                     <AiOutlineDelete
                       className={`dark:text-white text-[20px] mr-2 text-black cursor-pointer`}
                       onClick={() => removeContentHandler(index)}

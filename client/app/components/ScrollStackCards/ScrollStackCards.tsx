@@ -8,19 +8,19 @@ const projects = [
   {
     title: 'Premiere Pro',
     description: 'Master Adobe Premiere Pro with our comprehensive course designed for aspiring video editors and content creators. Learn professional video editing techniques, advanced workflows, and industry-standard practices to create stunning videos. Dive deep into color correction, audio mixing, multi-cam editing, and advanced effects. Whether you\'re creating content for YouTube, films, or corporate videos, this course covers everything from basic cuts to complex storytelling techniques. Build a strong foundation and develop the skills needed to compete in the professional video editing industry.',
-    src: '/home/cards/pr.png',
-    link: '#',
-  },
-  {
-    title: 'AI in Editing',
-    description: 'Harness the power of cutting-edge AI tools in video editing to revolutionize your workflow and creativity. Discover how artificial intelligence is transforming the editing landscape with automated color grading, intelligent object removal, smart reframing, and voice synthesis. Learn to integrate AI-powered plugins and tools that save hours of manual work while maintaining creative control. Explore auto-captioning, scene detection, content-aware fill, and neural filters that bring professional-grade results in a fraction of the time. Stay ahead of the curve and unlock new creative possibilities that were impossible just a few years ago.',
-    src: '/home/cards/ai.jpg',
+    src: '/home/cards/pr.jpg',
     link: '#',
   },
   {
     title: 'After Effects',
     description: 'Create breathtaking motion graphics and visual effects with Adobe After Effects, the industry standard for animation and compositing. Learn advanced techniques in kinetic typography, 3D camera tracking, rotoscoping, keying, and particle systems. Master the art of creating professional title sequences, logo animations, and complex visual effects that elevate your video projects to cinematic levels. Understand expression-based animation, motion tracking, and how to seamlessly integrate CG elements with live footage. From explainer videos to Hollywood-style effects, develop the skills to bring any creative vision to life with stunning motion graphics.',
     src: '/home/cards/ae.jpg',
+    link: '#',
+  },
+  {
+    title: 'AI in Editing',
+    description: 'Harness the power of cutting-edge AI tools in video editing to revolutionize your workflow and creativity. Discover how artificial intelligence is transforming the editing landscape with automated color grading, intelligent object removal, smart reframing, and voice synthesis. Learn to integrate AI-powered plugins and tools that save hours of manual work while maintaining creative control. Explore auto-captioning, scene detection, content-aware fill, and neural filters that bring professional-grade results in a fraction of the time. Stay ahead of the curve and unlock new creative possibilities that were impossible just a few years ago.',
+    src: '/home/cards/ai.jpg',
     link: '#',
   },
 ];
@@ -110,7 +110,7 @@ export const Card: React.FC<CardProps> = ({
             className={`relative w-full md:w-[50%] h-[200px] sm:h-[250px] md:h-full rounded-xl sm:rounded-2xl overflow-hidden`}
           >
             <div className={`w-full h-full`}>
-              <Image fill src={src} alt={title} className='object-cover' />
+              <Image fill src={src} alt={title} className='object-cover rounded-xl sm:rounded-2xl' />
             </div>
           </div>
 

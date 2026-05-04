@@ -19,6 +19,7 @@ import {
   SettingsIcon,
   ExitToAppIcon,
   LocalOfferIcon,
+  LibraryBooksIcon,
 } from "./Icon";
 import avatarDefault from "../../../../public/assests/avatar.png";
 import { useSelector } from "react-redux";
@@ -204,6 +205,22 @@ const Sidebar = () => {
             title="Live Courses"
             to="/admin/courses"
             icon={<OndemandVideoIcon />}
+            selected={selected}
+            setSelected={setSelected}
+            isCollapsed={isCollapsed}
+          />
+          <Item
+            title="Create Bundle"
+            to="/admin/create-bundle"
+            icon={<LibraryBooksIcon />}
+            selected={selected}
+            setSelected={setSelected}
+            isCollapsed={isCollapsed}
+          />
+          <Item
+            title="All Bundles"
+            to="/admin/bundles"
+            icon={<LibraryBooksIcon />}
             selected={selected}
             setSelected={setSelected}
             isCollapsed={isCollapsed}

@@ -268,7 +268,7 @@ const RefundPolicy = (props: Props) => {
                 📧 Email: <a href="mailto:contact@bbedits.in" className="text-blue-600 dark:text-blue-400 font-semibold">contact@bbedits.in</a>
               </p>
               <p className="text-[15px] font-Poppins leading-7">
-                📞 Phone: <a href="tel:+919515595970" className="text-blue-600 dark:text-blue-400 font-semibold">+91 9515595970</a>
+                📞 Phone: <a href="tel:+919110772715" className="text-blue-600 dark:text-blue-400 font-semibold">+91 9110772715</a>
               </p>
               <p className="text-[15px] font-Poppins leading-7">
                 📍 Location: Vizag, India

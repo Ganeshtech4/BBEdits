@@ -1,8 +1,12 @@
 client/.next
 client/node_modules
+client/tsconfig.tsbuildinfo
 
 node_modules
 .next
+chunks/
+*-build.zip
+*.tar.gz
 # Logs
 logs
 *.log

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Link from 'next/link';
 import VideoCard from './VideoCard';
 
 const testimonials = [
@@ -84,9 +85,9 @@ const VideoTestimonials = () => {
                     <p className="text-gray-400 text-base mb-6">
                         Join thousands of students who transformed their editing skills
                     </p>
-                    <button className="bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white px-10 py-4 rounded-full font-bold text-base tracking-wide hover:scale-105 transition-all duration-300 uppercase shadow-[0_0_30px_rgba(147,51,234,0.4)] hover:shadow-[0_0_40px_rgba(147,51,234,0.6)]">
+                    <Link href="/courses" className="inline-block bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white px-10 py-4 rounded-full font-bold text-base tracking-wide hover:scale-105 transition-all duration-300 uppercase shadow-[0_0_30px_rgba(147,51,234,0.4)] hover:shadow-[0_0_40px_rgba(147,51,234,0.6)]">
                         Start Your Journey
-                    </button>
+                    </Link>
                 </div>
             </div>
         </div>

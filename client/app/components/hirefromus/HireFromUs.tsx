@@ -22,7 +22,7 @@ const HireFromUs = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitMessage, setSubmitMessage] = useState('');
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
@@ -30,13 +30,39 @@ const HireFromUs = () => {
     };
 
     const handleWhatsAppClick = () => {
-        const phoneNumber = '919515595970';
+        const phoneNumber = '919398008571';
         const message = encodeURIComponent('Hi, I would like to hire video editors from BBEdits.');
         window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
     };
 
-    const handleSubmit = async (e) => {
+    const sendToWhatsApp = (data: typeof formData) => {
+        const phoneNumber = '919398008571';
+        const message = `Hi, I would like to hire video editors from BBEdits.
+
+*Hiring Request Details:*
+
+👤 Name: ${data.name}
+📞 Phone: ${data.phone}
+📧 Email: ${data.email}
+🏢 Company: ${data.companyName}
+🔗 Channel: ${data.channelLink}
+📍 Address: ${data.fullAddress}
+👥 Editors Needed: ${data.editors}
+💼 Employment Type: ${data.employmentType}
+⭐ Skill Level: ${data.skillLevel}
+🎬 Role Nature: ${data.roleNature}
+💰 Budget: ${data.budget}
+${data.additionalInfo ? `📝 Additional Info: ${data.additionalInfo}` : ''}
+
+Looking forward to your response!`;
+
+        window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
+    };
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        e.stopPropagation();
+        
         setIsSubmitting(true);
         setSubmitMessage('');
 
@@ -68,7 +94,12 @@ const HireFromUs = () => {
             const result = await response.json();
 
             if (result.success) {
-                setSubmitMessage('✓ Form submitted successfully!');
+                setSubmitMessage('✓ Form submitted successfully! Redirecting to WhatsApp...');
+                
+                // Send to WhatsApp with form data
+                setTimeout(() => {
+                    sendToWhatsApp(formData);
+                }, 1000);
                 
                 // Reset form after successful submission
                 setTimeout(() => {
@@ -88,7 +119,7 @@ const HireFromUs = () => {
                     });
                     setSubmitMessage('');
                     setIsSubmitting(false);
-                }, 2000);
+                }, 3000);
             } else {
                 setSubmitMessage('✗ Submission failed. Please try again.');
                 setIsSubmitting(false);
@@ -98,6 +129,8 @@ const HireFromUs = () => {
             setSubmitMessage('✗ An error occurred. Please try again.');
             setIsSubmitting(false);
         }
+
+        return false;
     };
 
     return (
@@ -113,34 +146,19 @@ const HireFromUs = () => {
                 <div className="hire-hero-container">
                     <div className="hero-badge">
                         <FaStar className="badge-icon" />
-                        <span>Industry Leading Talent</span>
+                        <span>Leading Talent</span>
                     </div>
                     
                     <h1 className="hero-title-premium">
-                        Hire Elite Video Editors
+                        Hire Top-Tier Video Editors
                         <span className="hero-title-gradient">Trained by Professionals</span>
                     </h1>
                     
                     <p className="hero-subtitle-premium">
                         Access our exclusive network of highly-skilled video editors specializing in 
-                        Premiere Pro, After Effects, DaVinci Resolve, and advanced motion graphics.
+                        Premiere Pro and After Effects.
                     </p>
-                    
-                    <div className="hero-features">
-                        <div className="feature-item">
-                            <FaCheckCircle className="feature-icon" />
-                            <span>Pre-vetted Professionals</span>
-                        </div>
-                        <div className="feature-item">
-                            <FaCheckCircle className="feature-icon" />
-                            <span>Industry Certified</span>
-                        </div>
-                        <div className="feature-item">
-                            <FaCheckCircle className="feature-icon" />
-                            <span>24/7 Support</span>
-                        </div>
-                    </div>
-                    
+                                     
                     <div className="hero-cta-group">
                         <button onClick={handleWhatsAppClick} className="cta-whatsapp">
                             <FaWhatsapp className="cta-icon" />
@@ -153,23 +171,6 @@ const HireFromUs = () => {
                             </svg>
                         </a>
                     </div>
-                    
-                    <div className="hero-stats-premium">
-                        <div className="stat-card">
-                            <div className="stat-number">300+</div>
-                            <div className="stat-label">Placements</div>
-                        </div>
-                        <div className="stat-divider"></div>
-                        <div className="stat-card">
-                            <div className="stat-number">95%</div>
-                            <div className="stat-label">Client Satisfaction</div>
-                        </div>
-                        <div className="stat-divider"></div>
-                        <div className="stat-card">
-                            <div className="stat-number">50+</div>
-                            <div className="stat-label">Companies</div>
-                        </div>
-                    </div>
                 </div>
             </section>
 
@@ -181,7 +182,7 @@ const HireFromUs = () => {
                         <p>Fill in the details below and we'll get back to you within 24 hours</p>
                     </div>
                     
-                    <form className="hire-form-new" onSubmit={handleSubmit}>
+                    <form className="hire-form-new" onSubmit={handleSubmit} action={undefined} method="post">
                         <div className="form-grid">
                             <div className="form-group">
                                 <label>Full Name *</label>
@@ -200,7 +201,7 @@ const HireFromUs = () => {
                                 <input
                                     type="tel"
                                     name="phone"
-                                    placeholder="+91 9515595970"
+                                    placeholder="+91 9398008571"
                                     value={formData.phone}
                                     onChange={handleChange}
                                     required
@@ -299,9 +300,6 @@ const HireFromUs = () => {
                                     <option value="video-editor">Video Editor</option>
                                     <option value="motion-graphics">Motion Graphics</option>
                                     <option value="color-grading">Color Grading</option>
-                                    <option value="vfx">VFX Artist</option>
-                                    <option value="animator">Animator</option>
-                                    <option value="content-creator">Content Creator</option>
                                 </select>
                             </div>
 
@@ -310,7 +308,7 @@ const HireFromUs = () => {
                                 <input
                                     type="text"
                                     name="budget"
-                                    placeholder="e.g., $500-$1000/month"
+                                    placeholder="e.g., ₹500-₹1000/month"
                                     value={formData.budget}
                                     onChange={handleChange}
                                     required
