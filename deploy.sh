@@ -63,12 +63,13 @@ echo -e "${GREEN}Step 4: Packaging files...${NC}"
 
 # Clean Next.js cache to reduce size
 rm -rf client/.next/cache 2>/dev/null
+rm -rf client/.next/dev 2>/dev/null
 
 # Create archives:
 # - deploy-client.tar.gz: .next contents with .next/ path prefix (correct for extraction with -C client)
 # - deploy-server.tar.gz: server build + mails + config
-tar czf /tmp/deploy-client.tar.gz -C client .next package.json next.config.js
-if [ $? -ne 0 ]; then echo -e "${RED}Client packaging failed!${NC}"; exit 1; fi
+tar czf /tmp/deploy-client.tar.gz --warning=no-file-changed -C client .next package.json next.config.js || true
+if [ ! -s /tmp/deploy-client.tar.gz ]; then echo -e "${RED}Client packaging failed!${NC}"; exit 1; fi
 
 tar czf /tmp/deploy-server.tar.gz build mails package.json ecosystem.config.js
 if [ $? -ne 0 ]; then echo -e "${RED}Server packaging failed!${NC}"; exit 1; fi
@@ -82,15 +83,13 @@ echo -e "${GREEN}Packaged OK${NC}\n"
 echo -e "${GREEN}Step 5: Uploading via tmpfiles.org...${NC}"
 
 echo "Uploading client build (~30MB)..."
-CLIENT_RAW=$(curl -sF "file=@/tmp/deploy-client.tar.gz" https://tmpfiles.org/api/v1/upload)
-CLIENT_URL=$(echo "$CLIENT_RAW" | grep -o 'http[^"]*' | sed 's|tmpfiles.org/|tmpfiles.org/dl/|')
-if [ -z "$CLIENT_URL" ]; then echo -e "${RED}Client upload failed! Response: $CLIENT_RAW${NC}"; exit 1; fi
+CLIENT_URL=$(curl -s -F "reqtype=fileupload" -F "fileToUpload=@/tmp/deploy-client.tar.gz" "https://catbox.moe/user/api.php")
+if [[ "$CLIENT_URL" != https://* ]]; then echo -e "${RED}Client upload failed! Response: $CLIENT_URL${NC}"; exit 1; fi
 echo "Client URL: $CLIENT_URL"
 
 echo "Uploading server build..."
-SERVER_RAW=$(curl -sF "file=@/tmp/deploy-server.tar.gz" https://tmpfiles.org/api/v1/upload)
-SERVER_URL=$(echo "$SERVER_RAW" | grep -o 'http[^"]*' | sed 's|tmpfiles.org/|tmpfiles.org/dl/|')
-if [ -z "$SERVER_URL" ]; then echo -e "${RED}Server upload failed! Response: $SERVER_RAW${NC}"; exit 1; fi
+SERVER_URL=$(curl -s -F "reqtype=fileupload" -F "fileToUpload=@/tmp/deploy-server.tar.gz" "https://catbox.moe/user/api.php")
+if [[ "$SERVER_URL" != https://* ]]; then echo -e "${RED}Server upload failed! Response: $SERVER_URL${NC}"; exit 1; fi
 echo "Server URL: $SERVER_URL"
 
 rm -f /tmp/deploy-client.tar.gz /tmp/deploy-server.tar.gz

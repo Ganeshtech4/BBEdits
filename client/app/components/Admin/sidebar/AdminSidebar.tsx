@@ -1,325 +1,130 @@
 "use client";
-import { FC, useEffect, useState } from "react";
-import { Box, IconButton, Typography } from "@mui/material";
+
 import {
+  BarChartOutlinedIcon,
+  ExitToAppIcon,
+  GroupsIcon,
   HomeOutlinedIcon,
-  ArrowForwardIosIcon,
-  ArrowBackIosIcon,
+  LibraryBooksIcon,
+  LocalOfferIcon,
+  ManageHistoryIcon,
+  MapOutlinedIcon,
+  OndemandVideoIcon,
   PeopleOutlinedIcon,
   ReceiptOutlinedIcon,
-  BarChartOutlinedIcon,
-  MapOutlinedIcon,
-  GroupsIcon,
-  OndemandVideoIcon,
+  TrendingUpIcon,
   VideoCallIcon,
-  WebIcon,
-  QuizIcon,
   WysiwygIcon,
-  ManageHistoryIcon,
-  SettingsIcon,
-  ExitToAppIcon,
-  LocalOfferIcon,
-  LibraryBooksIcon,
+  FolderOpenIcon,
 } from "./Icon";
 import avatarDefault from "../../../../public/assests/avatar.png";
 import { useSelector } from "react-redux";
 import Link from "next/link";
 import Image from "next/image";
-import { useTheme } from "next-themes";
+import { usePathname } from "next/navigation";
 
-interface itemProps {
-  title: string;
-  to: string;
-  icon: JSX.Element;
-  selected: string;
-  setSelected: any;
-  isCollapsed: boolean;
-}
+const menuGroups = [
+  {
+    label: "Overview",
+    items: [{ title: "Dashboard", to: "/admin", icon: HomeOutlinedIcon }],
+  },
+  {
+    label: "Core",
+    items: [
+      { title: "Users", to: "/admin/users", icon: GroupsIcon },
+      { title: "Invoices", to: "/admin/invoices", icon: ReceiptOutlinedIcon },
+      { title: "Manage Team", to: "/admin/team", icon: PeopleOutlinedIcon },
+    ],
+  },
+  {
+    label: "Content",
+    items: [
+      { title: "Create Course", to: "/admin/create-course", icon: VideoCallIcon },
+      { title: "Live Courses", to: "/admin/courses", icon: OndemandVideoIcon },
+      { title: "Create Bundle", to: "/admin/create-bundle", icon: LibraryBooksIcon },
+      { title: "All Bundles", to: "/admin/bundles", icon: LibraryBooksIcon },
+      { title: "Categories", to: "/admin/categories", icon: WysiwygIcon },
+      { title: "Coupons", to: "/admin/coupons", icon: LocalOfferIcon },
+      { title: "Assets", to: "/admin/assets", icon: FolderOpenIcon },
+    ],
+  },
+  {
+    label: "Analytics",
+    items: [
+      { title: "Revenue", to: "/admin/revenue-analytics", icon: TrendingUpIcon },
+      { title: "Course Trends", to: "/admin/courses-analytics", icon: BarChartOutlinedIcon },
+      { title: "Order Trends", to: "/admin/orders-analytics", icon: MapOutlinedIcon },
+      { title: "User Trends", to: "/admin/users-analytics", icon: ManageHistoryIcon },
+    ],
+  },
+  {
+    label: "Session",
+    items: [{ title: "Logout", to: "/", icon: ExitToAppIcon }],
+  },
+];
 
-const Item: FC<itemProps> = ({ title, to, icon, selected, setSelected, isCollapsed }) => {
-  return (
-    <Link href={to} passHref>
-      <div
-        className={`flex items-center p-2 my-1 rounded-md cursor-pointer transition-colors duration-200 ${selected === title
-            ? "text-white bg-white/20"
-            : "text-white/90 dark:text-[#ffffffc1] hover:text-white hover:bg-white/10"
-          }`}
-        onClick={() => setSelected(title)}
-      >
-        <div className="flex items-center justify-center min-w-[40px]">{icon}</div>
-        {!isCollapsed && (
-          <Typography className="!text-[16px] !font-Poppins ml-2">{title}</Typography>
-        )}
-      </div>
-    </Link>
-  );
-};
-
-const Sidebar = () => {
+export default function Sidebar() {
   const { user } = useSelector((state: any) => state.auth);
-  const [logout, setlogout] = useState(false);
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [selected, setSelected] = useState("Dashboard");
-  const [mounted, setMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
-
-  useEffect(() => setMounted(true), []);
-
-  if (!mounted) {
-    return null;
-  }
-
-  const logoutHandler = () => {
-    setlogout(true);
-  };
+  const pathname = usePathname();
+  const currentPath = pathname || "";
 
   return (
-    <Box
-      sx={{
-        "& .pro-sidebar-inner": {
-          background: `${theme === "dark" ? "#111C43 !important" : "linear-gradient(135deg, #5b21b6 0%, #7c3aed 100%) !important"
-            }`,
-        },
-        "& .pro-icon-wrapper": {
-          backgroundColor: "transparent !important",
-        },
-        "& .pro-inner-item:hover": {
-          color: "#a78bfa !important",
-        },
-        "& .pro-menu-item.active": {
-          color: "#c4b5fd !important",
-        },
-        "& .pro-inner-item": {
-          padding: "5px 35px 5px 20px !important",
-          opacity: 1,
-        },
-        "& .pro-menu-item": {
-          color: `${theme !== "dark" && "#fff"}`,
-        },
-      }}
-      className="!bg-gradient-to-br !from-purple-700 !to-violet-600 dark:bg-[#111C43] h-screen sticky top-0 left-0 z-[9999]"
-      style={{
-        width: isCollapsed ? "80px" : "250px",
-        transition: "width 0.3s",
-      }}
-    >
-      <div className="h-full flex flex-col overflow-y-auto overflow-x-hidden">
-        <div className="flex justify-between items-center p-4">
-          {!isCollapsed && (
-            <Link href="/" className="block">
-              <h3 className="text-[25px] font-Poppins uppercase dark:text-white text-white">
-                BBEdits
-              </h3>
-            </Link>
-          )}
-          <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
-            {isCollapsed ? <ArrowForwardIosIcon className="text-white dark:text-[#ffffffc1]" /> : <ArrowBackIosIcon className="text-white dark:text-[#ffffffc1]" />}
-          </IconButton>
+    <div className="sticky top-0 h-screen border-r border-slate-200/80 bg-white/75 backdrop-blur-xl dark:border-slate-800/80 dark:bg-slate-950/70">
+      <div className="flex h-full flex-col overflow-y-auto px-3 py-4 lg:px-4">
+        <div className="hidden rounded-[24px] border border-slate-200/70 bg-white/85 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/80 lg:block">
+          <div className="flex items-center gap-3">
+            <Image
+              alt="profile-user"
+              width={54}
+              height={54}
+              src={user?.avatar ? user.avatar.url : avatarDefault}
+              className="h-[54px] w-[54px] rounded-2xl border border-cyan-300/60 object-cover dark:border-cyan-500/30"
+            />
+            <div className="min-w-0">
+              <p className="truncate text-sm font-semibold text-slate-900 dark:text-slate-100">
+                {user?.name}
+              </p>
+              <p className="mt-1 text-xs uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">
+                {user?.role}
+              </p>
+            </div>
+          </div>
         </div>
 
-        {!isCollapsed && (
-          <Box mb="25px">
-            <Box display="flex" justifyContent="center" alignItems="center">
-              <Image
-                alt="profile-user"
-                width={100}
-                height={100}
-                src={user.avatar ? user.avatar.url : avatarDefault}
-                style={{
-                  cursor: "pointer",
-                  borderRadius: "50%",
-                  border: "3px solid #5b6fe6",
-                }}
-              />
-            </Box>
-            <Box textAlign="center">
-              <Typography
-                variant="h4"
-                className="!text-[20px] text-white dark:text-[#ffffffc1]"
-                sx={{ m: "10px 0 0 0" }}
-              >
-                {user?.name}
-              </Typography>
-              <Typography
-                variant="h6"
-                sx={{ m: "10px 0 0 0" }}
-                className="!text-[20px] text-white/90 dark:text-[#ffffffc1] capitalize"
-              >
-                - {user?.role}
-              </Typography>
-            </Box>
-          </Box>
-        )}
+        <nav className="mt-5 space-y-5">
+          {menuGroups.map((group) => (
+            <div key={group.label}>
+              <p className="mb-2 hidden px-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-400 lg:block">
+                {group.label}
+              </p>
+              <div className="space-y-1.5">
+                {group.items.map((item) => {
+                  const Icon = item.icon;
+                  const isActive =
+                    item.to === "/admin"
+                      ? currentPath === item.to
+                      : currentPath === item.to || currentPath.startsWith(`${item.to}/`);
 
-        <Box paddingLeft={isCollapsed ? undefined : "10%"}>
-          <Item
-            title="Dashboard"
-            to="/admin"
-            icon={<HomeOutlinedIcon />}
-            selected={selected}
-            setSelected={setSelected}
-            isCollapsed={isCollapsed}
-          />
-
-          <Typography
-            variant="h5"
-            sx={{ m: "15px 0 5px 20px" }}
-            className="!text-[18px] text-white/80 dark:text-[#ffffffc1] capitalize !font-[400]"
-          >
-            {!isCollapsed && "Data"}
-          </Typography>
-          <Item
-            title="Users"
-            to="/admin/users"
-            icon={<GroupsIcon />}
-            selected={selected}
-            setSelected={setSelected}
-            isCollapsed={isCollapsed}
-          />
-
-          <Item
-            title="Invoices"
-            to="/admin/invoices"
-            icon={<ReceiptOutlinedIcon />}
-            selected={selected}
-            setSelected={setSelected}
-            isCollapsed={isCollapsed}
-          />
-
-          <Typography
-            variant="h5"
-            className="!text-[18px] text-white/80 dark:text-[#ffffffc1] capitalize !font-[400]"
-            sx={{ m: "15px 0 5px 20px" }}
-          >
-            {!isCollapsed && "Content"}
-          </Typography>
-          <Item
-            title="Create Course"
-            to="/admin/create-course"
-            icon={<VideoCallIcon />}
-            selected={selected}
-            setSelected={setSelected}
-            isCollapsed={isCollapsed}
-          />
-          <Item
-            title="Live Courses"
-            to="/admin/courses"
-            icon={<OndemandVideoIcon />}
-            selected={selected}
-            setSelected={setSelected}
-            isCollapsed={isCollapsed}
-          />
-          <Item
-            title="Create Bundle"
-            to="/admin/create-bundle"
-            icon={<LibraryBooksIcon />}
-            selected={selected}
-            setSelected={setSelected}
-            isCollapsed={isCollapsed}
-          />
-          <Item
-            title="All Bundles"
-            to="/admin/bundles"
-            icon={<LibraryBooksIcon />}
-            selected={selected}
-            setSelected={setSelected}
-            isCollapsed={isCollapsed}
-          />
-
-          <Typography
-            variant="h5"
-            className="!text-[18px] text-white/80 dark:text-[#ffffffc1] capitalize !font-[400]"
-            sx={{ m: "15px 0 5px 20px" }}
-          >
-            {!isCollapsed && "Customization"}
-          </Typography>
-          <Item
-            title="Categories"
-            to="/admin/categories"
-            icon={<WysiwygIcon />}
-            selected={selected}
-            setSelected={setSelected}
-            isCollapsed={isCollapsed}
-          />
-          <Item
-            title="Coupons"
-            to="/admin/coupons"
-            icon={<LocalOfferIcon />}
-            selected={selected}
-            setSelected={setSelected}
-            isCollapsed={isCollapsed}
-          />
-
-          <Typography
-            variant="h5"
-            className="!text-[18px] text-white/80 dark:text-[#ffffffc1] capitalize !font-[400]"
-            sx={{ m: "15px 0 5px 20px" }}
-          >
-            {!isCollapsed && "Controllers"}
-          </Typography>
-          <Item
-            title="Manage Team"
-            to="/admin/team"
-            icon={<PeopleOutlinedIcon />}
-            selected={selected}
-            setSelected={setSelected}
-            isCollapsed={isCollapsed}
-          />
-
-          <Typography
-            variant="h6"
-            className="!text-[18px] text-white/80 dark:text-[#ffffffc1] capitalize !font-[400]"
-            sx={{ m: "15px 0 5px 20px" }}
-          >
-            {!isCollapsed && "Analytics"}
-          </Typography>
-          <Item
-            title="Courses Analytics"
-            to="/admin/courses-analytics"
-            icon={<BarChartOutlinedIcon />}
-            selected={selected}
-            setSelected={setSelected}
-            isCollapsed={isCollapsed}
-          />
-          <Item
-            title="Orders Analytics"
-            to="/admin/orders-analytics"
-            icon={<MapOutlinedIcon />}
-            selected={selected}
-            setSelected={setSelected}
-            isCollapsed={isCollapsed}
-          />
-
-          <Item
-            title="Users Analytics"
-            to="/admin/users-analytics"
-            icon={<ManageHistoryIcon />}
-            selected={selected}
-            setSelected={setSelected}
-            isCollapsed={isCollapsed}
-          />
-
-          <Typography
-            variant="h6"
-            className="!text-[18px] text-white/80 dark:text-[#ffffffc1] capitalize !font-[400]"
-            sx={{ m: "15px 0 5px 20px" }}
-          >
-            {!isCollapsed && "Extras"}
-          </Typography>
-          <div onClick={logoutHandler}>
-            <Item
-              title="Logout"
-              to="/"
-              icon={<ExitToAppIcon />}
-              selected={selected}
-              setSelected={setSelected}
-              isCollapsed={isCollapsed}
-            />
-          </div>
-        </Box>
+                  return (
+                    <Link
+                      href={item.to}
+                      key={item.to}
+                      className={`group flex items-center justify-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium transition-all duration-200 lg:justify-start ${
+                        isActive
+                          ? "bg-slate-950 text-white shadow-lg shadow-slate-950/15 dark:bg-cyan-400 dark:text-slate-950 dark:shadow-cyan-500/20"
+                          : "text-slate-600 hover:bg-white hover:text-slate-950 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-slate-100"
+                      }`}
+                    >
+                      <Icon className="!text-[20px]" />
+                      <span className="hidden lg:block">{item.title}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </nav>
       </div>
-    </Box>
+    </div>
   );
-};
-
-export default Sidebar;
+}

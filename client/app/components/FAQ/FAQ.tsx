@@ -78,7 +78,7 @@ const FAQ = () => {
             Have Questions?
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-violet-600">
-              We've Answered Them.
+              We&apos;ve Answered Them.
             </span>
           </h2>
           <p className="text-gray-400 text-sm sm:text-base md:text-lg max-w-2xl mx-auto">
@@ -141,7 +141,7 @@ const FAQ = () => {
         {/* Contact CTA */}
         <div className="text-center mt-10 sm:mt-12 md:mt-16">
           <p className="text-gray-400 text-sm sm:text-base mb-4">
-            Still have questions? We're here to help!
+            Still have questions? We&apos;re here to help!
           </p>
           <a
             href="/contact"

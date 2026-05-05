@@ -51,10 +51,25 @@ exports.createOrder = (0, catchAsyncErrors_1.CatchAsyncError)(async (req, res, n
         if (!course) {
             return next(new ErrorHandler_1.default("Course not found", 404));
         }
+        // Determine the actual amount paid — fetch from Razorpay so coupon discounts are accurate
+        let paidAmount = course.price;
+        try {
+            const rzpOrderId = payment_info?.razorpay_order_id;
+            if (rzpOrderId) {
+                const rzpOrder = await razorpay.orders.fetch(rzpOrderId);
+                // Razorpay stores amount in paise; convert to rupees
+                paidAmount = Number(rzpOrder.amount) / 100;
+            }
+        }
+        catch (e) {
+            // If Razorpay fetch fails, fall back to course price
+            console.warn("Could not fetch Razorpay order amount:", e.message);
+        }
         const data = {
             courseId: course._id,
             userId: user?._id,
             payment_info,
+            price: paidAmount,
         };
         const mailData = {
             order: {

@@ -19,6 +19,7 @@ const layout_route_1 = __importDefault(require("./routes/layout.route"));
 const contact_route_1 = __importDefault(require("./routes/contact.route"));
 const coupon_route_1 = __importDefault(require("./routes/coupon.route"));
 const bundle_route_1 = __importDefault(require("./routes/bundle.route"));
+const asset_route_1 = __importDefault(require("./routes/asset.route"));
 const express_rate_limit_1 = require("express-rate-limit");
 // body parser
 exports.app.use(express_1.default.json({ limit: "50mb" }));
@@ -45,7 +46,7 @@ const limiter = (0, express_rate_limit_1.rateLimit)({
     }
 });
 // routes
-exports.app.use("/api/v1", user_route_1.default, order_route_1.default, course_route_1.default, notification_route_1.default, analytics_route_1.default, layout_route_1.default, contact_route_1.default, coupon_route_1.default, bundle_route_1.default);
+exports.app.use("/api/v1", user_route_1.default, order_route_1.default, course_route_1.default, notification_route_1.default, analytics_route_1.default, layout_route_1.default, contact_route_1.default, coupon_route_1.default, bundle_route_1.default, asset_route_1.default);
 // testing api
 exports.app.get("/test", async (req, res, next) => {
     try {

@@ -10,4 +10,5 @@ const analyticsRouter = express_1.default.Router();
 analyticsRouter.get("/get-users-analytics", auth_1.isAutheticated, (0, auth_1.authorizeRoles)("admin"), analytics_controller_1.getUsersAnalytics);
 analyticsRouter.get("/get-orders-analytics", auth_1.isAutheticated, (0, auth_1.authorizeRoles)("admin"), analytics_controller_1.getOrderAnalytics);
 analyticsRouter.get("/get-courses-analytics", auth_1.isAutheticated, (0, auth_1.authorizeRoles)("admin"), analytics_controller_1.getCoursesAnalytics);
+analyticsRouter.get("/get-revenue-analytics", auth_1.isAutheticated, (0, auth_1.authorizeRoles)("admin"), analytics_controller_1.getRevenueAnalytics);
 exports.default = analyticsRouter;

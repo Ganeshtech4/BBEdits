@@ -1,5 +1,4 @@
 'use client'
-import DashboardHero from '@/app/components/Admin/DashboardHero'
 import AdminProtected from '@/app/hooks/adminProtected'
 import Heading from '@/app/utils/Heading'
 import React from 'react'
@@ -21,8 +20,7 @@ const page = (props: Props) => {
           <div className="1500px:w-[16%] w-1/5">
             <AdminSidebar />
           </div>
-          <div className="w-[85%]">
-            <DashboardHero />
+          <div className="w-[85%] overflow-y-auto">
             <AllUsers />
           </div>
         </div>

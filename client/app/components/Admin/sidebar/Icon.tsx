@@ -16,6 +16,8 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import FolderOpenIcon from "@mui/icons-material/FolderOpen";
 
 export {
     HomeOutlinedIcon,
@@ -36,4 +38,6 @@ export {
   ExitToAppIcon,
   LocalOfferIcon,
   LibraryBooksIcon,
+  TrendingUpIcon,
+  FolderOpenIcon,
 }

@@ -1,30 +1,27 @@
 'use client'
 import React from 'react'
-import AdminSidebar from "../../components/Admin/sidebar/AdminSidebar";
 import Heading from '../../../app/utils/Heading';
 import CourseAnalytics from "../../components/Admin/Analytics/CourseAnalytics";
-import DashboardHeader from '../../../app/components/Admin/DashboardHeader';
+import AdminShell from '../../components/Admin/AdminShell';
+import AdminProtected from '@/app/hooks/adminProtected';
 
 type Props = {}
 
 const page = (props: Props) => {
   return (
-    <div>
-        <Heading
-         title="BBEdits - Admin"
-         description="BBEdits is a platform for students to learn and get help from teachers"
-         keywords="Prograaming,MERN,Redux,Machine Learning"
-        />
-        <div className="flex" suppressHydrationWarning>
-            <div className="1500px:w-[16%] w-1/5">
-                <AdminSidebar />
-            </div>
-            <div className="w-[85%]">
-               <DashboardHeader />
-               <CourseAnalytics />
-            </div>
-        </div>
-    </div>
+    <AdminProtected>
+      <Heading
+        title="BBEdits - Courses Analytics"
+        description="Track course activity trends from the admin analytics panel"
+        keywords="Courses,Analytics,Admin,Dashboard"
+      />
+      <AdminShell
+        title="Courses analytics"
+        description="Understand content demand with clearer bars, better spacing, and simpler filters."
+      >
+        <CourseAnalytics />
+      </AdminShell>
+    </AdminProtected>
   )
 }
 

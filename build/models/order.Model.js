@@ -37,6 +37,10 @@ const orderSchema = new mongoose_1.Schema({
         type: Object,
         // required: true
     },
+    price: {
+        type: Number,
+        default: 0,
+    },
 }, { timestamps: true });
 const OrderModel = mongoose_1.default.model('Order', orderSchema);
 exports.default = OrderModel;

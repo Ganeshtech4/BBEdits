@@ -90,13 +90,14 @@ export default function HomeHero() {
       { threshold: 0.1 }
     )
 
-    if (titleRef.current) {
-      observer.observe(titleRef.current)
+    const titleEl = titleRef.current
+    if (titleEl) {
+      observer.observe(titleEl)
     }
 
     return () => {
-      if (titleRef.current) {
-        observer.unobserve(titleRef.current)
+      if (titleEl) {
+        observer.unobserve(titleEl)
       }
     }
   }, [])

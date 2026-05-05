@@ -44,7 +44,37 @@ export const analyticsApi = apiSlice.injectEndpoints({
                 };
             }
         }),
+        getRevenueAnalytics: builder.query({
+            query: ({
+                period,
+                startDate,
+                endDate,
+                groupBy,
+            }: {
+                period?: string;
+                startDate?: string;
+                endDate?: string;
+                groupBy?: string;
+            } = {}) => {
+                const params = new URLSearchParams();
+                if (period) params.append('period', period);
+                if (startDate) params.append('startDate', startDate);
+                if (endDate) params.append('endDate', endDate);
+                if (groupBy) params.append('groupBy', groupBy);
+
+                return {
+                    url: `get-revenue-analytics${params.toString() ? '?' + params.toString() : ''}`,
+                    method: 'GET',
+                    credentials: 'include' as const,
+                };
+            },
+        }),
     }),
 });
 
-export const { useGetCoursesAnalyticsQuery,useGetUsersAnalyticsQuery,useGetOrdersAnalyticsQuery } = analyticsApi;
+export const {
+    useGetCoursesAnalyticsQuery,
+    useGetUsersAnalyticsQuery,
+    useGetOrdersAnalyticsQuery,
+    useGetRevenueAnalyticsQuery,
+} = analyticsApi;

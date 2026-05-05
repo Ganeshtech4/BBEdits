@@ -1,17 +1,25 @@
-import { styles } from "@/app/styles/style";
 import { useGetOrdersAnalyticsQuery } from "@/redux/features/analytics/analyticsApi";
 import React, { useState } from "react";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
+import { LineChart } from "@mui/x-charts/LineChart";
 import Loader from "../../Loader/Loader";
+import {
+  AdminButton,
+  AdminCard,
+  AdminInput,
+  AdminSectionIntro,
+  AdminSelect,
+} from "../ui/admin-ui";
+
+const LABEL_COLOR = "#cbd5e1";
+
+const chartSx = {
+  "& .MuiChartsAxis-tickLabel": { fill: `${LABEL_COLOR} !important`, fontSize: "11px !important" },
+  "& .MuiChartsAxis-line": { stroke: "rgba(148,163,184,0.2)" },
+  "& .MuiChartsAxis-tick": { stroke: "rgba(148,163,184,0.2)" },
+  "& .MuiChartsGrid-line": { stroke: "rgba(148,163,184,0.1)" },
+  "& .MuiChartsLegend-label": { fill: `${LABEL_COLOR} !important` },
+  "& .MuiChartsLegend-mark": { rx: 4 },
+};
 
 type Props = {
   isDashboard?: boolean;
@@ -27,7 +35,6 @@ export default function OrdersAnalytics({ isDashboard }: Props) {
     endDate: "",
     groupBy: "day",
   });
-
   const [useCustomRange, setUseCustomRange] = useState(false);
 
   const { data, isLoading, refetch } = useGetOrdersAnalyticsQuery(
@@ -36,16 +43,10 @@ export default function OrdersAnalytics({ isDashboard }: Props) {
       : {}
   );
 
-  const analyticsData: any = [];
-  let totalRevenue = 0;
-
-  if (data) {
-    const dataSource = data.orders.customRange || data.orders.last12Months;
-    dataSource.forEach((item: any) => {
-      analyticsData.push({ name: item.name || item.month, Count: item.count });
-    });
-    totalRevenue = data.orders.totalRevenue || 0;
-  }
+  const dataSource = data?.orders?.customRange || data?.orders?.last12Months || [];
+  const xLabels: string[] = dataSource.map((item: any) => item.name || item.month);
+  const yCounts: number[] = dataSource.map((item: any) => item.count);
+  const totalRevenue = data?.orders?.totalRevenue || 0;
 
   const handleApplyFilter = () => {
     if (dateRange.startDate && dateRange.endDate) {
@@ -60,131 +61,112 @@ export default function OrdersAnalytics({ isDashboard }: Props) {
     refetch();
   };
 
+  if (isLoading) {
+    return <Loader />;
+  }
+
   return (
-    <>
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <div className={isDashboard ? "h-[30vh]" : "h-screen"}>
-          <div
-            className={isDashboard ? "mt-[0px] pl-[40px] mb-2" : "mt-[50px]"}
-          >
-            <h1
-              className={`${styles.title} ${
-                isDashboard && "!text-[20px]"
-              } px-5 !text-start`}
-            >
-              Orders Analytics
-            </h1>
-            {!isDashboard && (
-              <>
-                <p className={`${styles.label} px-5`}>
-                  {useCustomRange ? "Custom date range analytics" : "Last 12 months analytics data"}
-                </p>
+    <AdminCard className={isDashboard ? "h-[420px]" : "min-h-[680px]"}>
+      <AdminSectionIntro
+        eyebrow="Sales pulse"
+        title="Orders analytics"
+        description={
+          isDashboard
+            ? "Clean order momentum for the current reporting window."
+            : useCustomRange
+              ? "Custom range analytics with a simplified filter bar."
+              : "A clearer view of order flow over the last 12 months."
+        }
+        action={
+          !isDashboard && totalRevenue > 0 ? (
+            <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-right dark:border-emerald-500/20 dark:bg-emerald-500/10">
+              <p className="text-xs uppercase tracking-[0.24em] text-emerald-700 dark:text-emerald-300">
+                Total revenue
+              </p>
+              <p className="mt-1 text-lg font-semibold text-emerald-700 dark:text-emerald-200">
+                ₹{totalRevenue.toFixed(2)}
+              </p>
+            </div>
+          ) : null
+        }
+      />
 
-                {/* Revenue Display */}
-                {useCustomRange && totalRevenue > 0 && (
-                  <div className="px-5 mt-3">
-                    <div className="inline-block bg-[#3faf82] text-white px-6 py-3 rounded-lg shadow-md">
-                      <p className="text-sm opacity-90">Total Revenue</p>
-                      <p className="text-2xl font-bold">₹{totalRevenue.toFixed(2)}</p>
-                    </div>
-                  </div>
-                )}
-
-                {/* Date Range Filter */}
-                <div className="px-5 mt-5 flex flex-wrap gap-4 items-end">
-                  <div>
-                    <label className="text-sm text-black dark:text-white block mb-1">
-                      Start Date
-                    </label>
-                    <input
-                      type="date"
-                      value={dateRange.startDate}
-                      onChange={(e) =>
-                        setDateRange({ ...dateRange, startDate: e.target.value })
-                      }
-                      className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-black dark:text-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-sm text-black dark:text-white block mb-1">
-                      End Date
-                    </label>
-                    <input
-                      type="date"
-                      value={dateRange.endDate}
-                      onChange={(e) =>
-                        setDateRange({ ...dateRange, endDate: e.target.value })
-                      }
-                      className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-black dark:text-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-sm text-black dark:text-white block mb-1">
-                      Group By
-                    </label>
-                    <select
-                      value={dateRange.groupBy}
-                      onChange={(e) =>
-                        setDateRange({ ...dateRange, groupBy: e.target.value })
-                      }
-                      className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-black dark:text-white"
-                    >
-                      <option value="day">Day</option>
-                      <option value="month">Month</option>
-                      <option value="year">Year</option>
-                    </select>
-                  </div>
-                  <button
-                    onClick={handleApplyFilter}
-                    className="px-6 py-2 bg-[#3faf82] text-white rounded hover:bg-[#2d8f68]"
-                  >
-                    Apply Filter
-                  </button>
-                  {useCustomRange && (
-                    <button
-                      onClick={handleReset}
-                      className="px-6 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-                    >
-                      Reset
-                    </button>
-                  )}
-                </div>
-              </>
-            )}
+      {!isDashboard ? (
+        <div className="mb-6 grid gap-3 rounded-[24px] border border-slate-200/70 bg-slate-50/80 p-4 dark:border-slate-800 dark:bg-slate-900/60 md:grid-cols-4">
+          <div>
+            <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">
+              Start date
+            </label>
+            <AdminInput
+              type="date"
+              value={dateRange.startDate}
+              onChange={(e) =>
+                setDateRange({ ...dateRange, startDate: e.target.value })
+              }
+            />
           </div>
-          <div
-            className={`w-full ${
-              !isDashboard ? "h-[60%]" : "h-full"
-            } flex items-center justify-center`}
-          >
-            <ResponsiveContainer
-              width={isDashboard ? "100%" : "90%"}
-              height={isDashboard ? "100%" : "80%"}
+          <div>
+            <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">
+              End date
+            </label>
+            <AdminInput
+              type="date"
+              value={dateRange.endDate}
+              onChange={(e) =>
+                setDateRange({ ...dateRange, endDate: e.target.value })
+              }
+            />
+          </div>
+          <div>
+            <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">
+              Group by
+            </label>
+            <AdminSelect
+              value={dateRange.groupBy}
+              onChange={(e) =>
+                setDateRange({ ...dateRange, groupBy: e.target.value })
+              }
             >
-              <LineChart
-                width={500}
-                height={300}
-                data={analyticsData}
-                margin={{
-                  top: 5,
-                  right: 30,
-                  left: 20,
-                  bottom: 5,
-                }}
+              <option value="day">Day</option>
+              <option value="month">Month</option>
+              <option value="year">Year</option>
+            </AdminSelect>
+          </div>
+          <div className="flex items-end gap-3">
+            <AdminButton className="flex-1" onClick={handleApplyFilter}>
+              Apply filter
+            </AdminButton>
+            {useCustomRange ? (
+              <AdminButton
+                variant="secondary"
+                className="flex-1"
+                onClick={handleReset}
               >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                {!isDashboard && <Legend />}
-                <Line type="monotone" dataKey="Count" stroke="#82ca9d" />
-              </LineChart>
-            </ResponsiveContainer>
+                Reset
+              </AdminButton>
+            ) : null}
           </div>
         </div>
-      )}
-    </>
+      ) : null}
+
+      <div className={isDashboard ? "h-[300px]" : "h-[470px]"}>
+        <LineChart
+          xAxis={[{ scaleType: "point", data: xLabels, tickLabelStyle: { fill: LABEL_COLOR, fontSize: 11 } }]}
+          yAxis={[{ tickLabelStyle: { fill: LABEL_COLOR, fontSize: 11 } }]}
+          series={[
+            {
+              data: yCounts,
+              color: "#14b8a6",
+              label: "Orders",
+              showMark: false,
+            },
+          ]}
+          height={isDashboard ? 300 : 470}
+          margin={{ top: 16, right: 16, left: 40, bottom: 40 }}
+          sx={chartSx}
+          grid={{ horizontal: true }}
+        />
+      </div>
+    </AdminCard>
   );
 }

@@ -20,9 +20,12 @@ exports.sendContactEmail = (0, catchAsyncErrors_1.CatchAsyncError)(async (req, r
         if (!emailRegex.test(email)) {
             return next(new ErrorHandler_1.default("Please provide a valid email address", 400));
         }
-        // Send email to admin
-        const adminEmail = process.env.ADMIN_EMAIL || process.env.SMTP_MAIL;
-        await (0, sendMail_1.default)({
+        // Send email to admin(s) — supports comma-separated ADMIN_EMAIL
+        const adminEmails = (process.env.ADMIN_EMAIL || process.env.SMTP_MAIL || "")
+            .split(",")
+            .map((e) => e.trim())
+            .filter(Boolean);
+        await Promise.all(adminEmails.map((adminEmail) => (0, sendMail_1.default)({
             email: adminEmail,
             subject: `Contact Form: ${subject}`,
             template: "contact-form.ejs",
@@ -32,7 +35,7 @@ exports.sendContactEmail = (0, catchAsyncErrors_1.CatchAsyncError)(async (req, r
                 subject,
                 message,
             },
-        });
+        })));
         // Send confirmation email to user
         await (0, sendMail_1.default)({
             email: email,

@@ -13,6 +13,7 @@ import layoutRouter from "./routes/layout.route";
 import contactRouter from "./routes/contact.route";
 import couponRouter from "./routes/coupon.route";
 import bundleRouter from "./routes/bundle.route";
+import assetRouter from "./routes/asset.route";
 import { rateLimit } from 'express-rate-limit'
 
 // body parser
@@ -56,7 +57,8 @@ app.use(
     layoutRouter,
     contactRouter,
     couponRouter,
-    bundleRouter
+    bundleRouter,
+    assetRouter
 );
 
 // testing api

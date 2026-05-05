@@ -31,9 +31,18 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
   const { data } = useSession();
   const [socialAuth, { isSuccess, error }] = useSocialAuthMutation();
   const [logout, setLogout] = useState(false);
+  // Track whether this session ever had an active Google sign-in so we don't
+  // trigger logout for anonymous visitors (data === null on first load).
+  const wasGoogleSignedIn = React.useRef(false);
   const { } = useLogOutQuery(undefined, {
     skip: !logout ? true : false,
   });
+
+  useEffect(() => {
+    if (data) {
+      wasGoogleSignedIn.current = true;
+    }
+  }, [data]);
 
   useEffect(() => {
     if (!isLoading) {
@@ -51,7 +60,9 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
           toast.success("Login Successfully");
         }
       }
-      if (data === null && !isLoading && !userData) {
+      // Only auto-logout when the Google session was previously active and is
+      // now gone — not on the initial anonymous page load.
+      if (data === null && wasGoogleSignedIn.current && !userData) {
         setLogout(true);
       }
     }
