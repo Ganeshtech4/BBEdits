@@ -43,7 +43,7 @@ const CourseDetails = ({
   }, [userData]);
 
   const dicountPercentenge =
-    ((data?.estimatedPrice - data.price) / data?.estimatedPrice) * 100;
+    ((data?.estimatedPrice - data?.price) / data?.estimatedPrice) * 100;
 
   const discountPercentengePrice = dicountPercentenge.toFixed(0);
 

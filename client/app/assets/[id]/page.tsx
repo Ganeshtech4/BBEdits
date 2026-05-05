@@ -30,7 +30,7 @@ export default function AssetDetailPage() {
   const [route, setRoute] = useState('Login');
   const { user } = useSelector((state: any) => state.auth);
 
-  const { data, isLoading, refetch } = useGetPublishedAssetByIdQuery(id, { skip: !id });
+  const { data, isLoading, refetch } = useGetPublishedAssetByIdQuery(id, { skip: !id || !user });
   const [createPaymentOrder] = useCreateAssetPaymentOrderMutation();
   const [purchaseAsset] = usePurchaseAssetMutation();
 

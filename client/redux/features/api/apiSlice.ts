@@ -31,7 +31,7 @@ export const apiSlice = createApi({
             })
           );
         } catch (error: any) {
-          console.log(error);
+          // 400/401 is expected for unauthenticated users — suppress console noise
         }
       },
     }),

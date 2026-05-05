@@ -1,7 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import Protected from '../hooks/useProtected';
 import Heading from '../utils/Heading';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -251,8 +250,7 @@ export default function AssetsPage() {
   );
 
   return (
-    <Protected>
-      <div className="min-h-screen bg-[#0d0720]">
+    <div className="min-h-screen bg-[#0d0720]">
         <Heading title="Free &amp; Premium Assets - BBEdits" description="Download free and premium design assets" keywords="Assets, Downloads, Free, Templates, Design" />
         <Header open={open} setOpen={setOpen} activeItem={0} setRoute={setRoute} route={route} />
 
@@ -431,8 +429,7 @@ export default function AssetsPage() {
         </main>
 
         <Footer />
-      </div>
-    </Protected>
+    </div>
   );
 }
 
