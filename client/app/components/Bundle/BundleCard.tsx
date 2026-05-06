@@ -49,6 +49,18 @@ const BundleCard: FC<Props> = ({ bundle, setRoute, setOpen: openAuthModal }) => 
   return (
     <>
       <div className="w-full flex flex-col bg-gradient-to-br from-[#0d0720] to-[#110b2e] border border-purple-500/30 rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(147,51,234,0.12)] hover:shadow-[0_0_50px_rgba(147,51,234,0.35)] transition-all duration-500 hover:border-purple-500/60 group">
+        {/* Thumbnail */}
+        {bundle.thumbnail?.url && (
+          <div className="w-full h-36 overflow-hidden">
+            <Image
+              src={bundle.thumbnail.url}
+              alt={bundle.name}
+              width={400}
+              height={144}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+          </div>
+        )}
         {/* Header */}
         <div className="relative p-5 pb-0">
           <div className="flex items-start justify-between gap-3">

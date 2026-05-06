@@ -3,6 +3,7 @@ import { CatchAsyncError } from "../middleware/catchAsyncErrors";
 import ErrorHandler from "../utils/ErrorHandler";
 import BundleModel from "../models/bundle.model";
 import CourseModel from "../models/course.model";
+import cloudinary from "cloudinary";
 import OrderModel from "../models/order.Model";
 import userModel from "../models/user.model";
 import NotificationModel from "../models/notification.Model";
@@ -30,13 +31,22 @@ export const createBundle = CatchAsyncError(
         return next(new ErrorHandler("A bundle must include at least 2 courses", 400));
       }
 
+      // Handle thumbnail upload
+      let thumbnailData: { public_id: string; url: string } | undefined;
+      if (thumbnail && typeof thumbnail === "string" && thumbnail.startsWith("data:")) {
+        const result = await cloudinary.v2.uploader.upload(thumbnail, { folder: "bundles" });
+        thumbnailData = { public_id: result.public_id, url: result.secure_url };
+      } else if (thumbnail && typeof thumbnail === "object") {
+        thumbnailData = thumbnail;
+      }
+
       const bundle = await BundleModel.create({
         name,
         description,
         courses,
         price,
         originalPrice,
-        thumbnail,
+        thumbnail: thumbnailData,
         isActive: isActive !== undefined ? isActive : true,
       });
 
@@ -51,9 +61,34 @@ export const createBundle = CatchAsyncError(
 export const editBundle = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const updateData: any = { ...req.body };
+
+      // Handle thumbnail update
+      if (updateData.thumbnail) {
+        if (typeof updateData.thumbnail === "string" && updateData.thumbnail.startsWith("data:")) {
+          // New base64 image — upload to Cloudinary
+          const existing = await BundleModel.findById(req.params.id);
+          if (existing?.thumbnail?.public_id) {
+            await cloudinary.v2.uploader.destroy(existing.thumbnail.public_id);
+          }
+          const result = await cloudinary.v2.uploader.upload(updateData.thumbnail, { folder: "bundles" });
+          updateData.thumbnail = { public_id: result.public_id, url: result.secure_url };
+        } else if (typeof updateData.thumbnail === "string" && updateData.thumbnail.startsWith("http")) {
+          // Existing URL passed back — reconstruct object
+          const existing = await BundleModel.findById(req.params.id);
+          updateData.thumbnail = {
+            url: updateData.thumbnail,
+            public_id: existing?.thumbnail?.url === updateData.thumbnail ? (existing?.thumbnail?.public_id || "") : "",
+          };
+        }
+        // If already an object, keep as-is
+      } else {
+        delete updateData.thumbnail;
+      }
+
       const bundle = await BundleModel.findByIdAndUpdate(
         req.params.id,
-        { $set: req.body },
+        { $set: updateData },
         { new: true }
       );
       if (!bundle) return next(new ErrorHandler("Bundle not found", 404));

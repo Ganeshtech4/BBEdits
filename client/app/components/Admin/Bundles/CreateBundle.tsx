@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { styles } from "@/app/styles/style";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -20,6 +20,10 @@ const CreateBundle = ({ editData }: Props) => {
 
   const courses = coursesData?.courses || [];
   const isSubmitting = isCreating || isEditing;
+
+  const thumbInputRef = useRef<HTMLInputElement>(null);
+  const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
+  const [thumbnailData, setThumbnailData] = useState<string | null>(null);
 
   const [bundleData, setBundleData] = useState({
     name: "",
@@ -42,8 +46,21 @@ const CreateBundle = ({ editData }: Props) => {
           typeof c === "string" ? c : c._id
         ),
       });
+      if (editData.thumbnail?.url) {
+        setThumbnailPreview(editData.thumbnail.url);
+      }
     }
   }, [editData]);
+
+  const handleThumbnailFile = (file: File) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const result = e.target?.result as string;
+      setThumbnailPreview(result);
+      setThumbnailData(result);
+    };
+    reader.readAsDataURL(file);
+  };
 
   const toggleCourse = (courseId: string) => {
     setBundleData((prev) => ({
@@ -62,7 +79,7 @@ const CreateBundle = ({ editData }: Props) => {
     if (!bundleData.price || Number(bundleData.price) <= 0) return toast.error("Valid price is required");
     if (bundleData.selectedCourses.length < 2) return toast.error("Select at least 2 courses");
 
-    const payload = {
+    const payload: any = {
       name: bundleData.name.trim(),
       description: bundleData.description.trim(),
       price: Number(bundleData.price),
@@ -70,6 +87,11 @@ const CreateBundle = ({ editData }: Props) => {
       courses: bundleData.selectedCourses,
       isActive: bundleData.isActive,
     };
+    if (thumbnailData) {
+      payload.thumbnail = thumbnailData;
+    } else if (editData?.thumbnail?.url) {
+      payload.thumbnail = editData.thumbnail.url;
+    }
 
     try {
       let response: any;
@@ -179,6 +201,44 @@ const CreateBundle = ({ editData }: Props) => {
               {bundleData.isActive ? "Live" : "Draft"}
             </span>
           </div>
+        </div>
+
+        {/* Bundle Thumbnail */}
+        <div className="bg-[#1c1c28] border border-purple-500/20 rounded-xl p-6">
+          <h2 className="text-lg font-semibold text-white mb-4">Bundle Thumbnail</h2>
+          <input
+            ref={thumbInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => e.target.files?.[0] && handleThumbnailFile(e.target.files[0])}
+          />
+          {thumbnailPreview ? (
+            <div className="relative w-full max-w-sm">
+              <Image
+                src={thumbnailPreview}
+                alt="Bundle thumbnail"
+                width={400}
+                height={160}
+                className="w-full h-40 object-cover rounded-lg"
+              />
+              <button
+                type="button"
+                onClick={() => { setThumbnailPreview(null); setThumbnailData(null); }}
+                className="absolute top-2 right-2 bg-red-600/80 hover:bg-red-600 text-white w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold"
+              >
+                ✕
+              </button>
+            </div>
+          ) : (
+            <div
+              onClick={() => thumbInputRef.current?.click()}
+              className="w-full h-36 flex flex-col items-center justify-center gap-2 border-2 border-dashed border-purple-500/30 rounded-lg cursor-pointer hover:border-purple-500/60 transition-colors"
+            >
+              <span className="text-gray-400 text-sm">Click to upload bundle image</span>
+              <span className="text-gray-500 text-xs">PNG, JPG, WebP</span>
+            </div>
+          )}
         </div>
 
         {/* Course Selection */}

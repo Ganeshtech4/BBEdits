@@ -61,23 +61,9 @@ const CoursesContent = (props: Props) => {
             activeItem={1}
           />
           <div className="w-[95%] 800px:w-[85%] m-auto min-h-[70vh] pt-32">
-            {
-                courses && courses.length === 0 && (
-                    <p className={`${styles.label} justify-center min-h-[50vh] flex items-center`}>
-                    {search ? "No courses found!" : "No courses found in this category. Please try another one!"}
-                  </p>
-                )
-            }
-            <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] 1500px:grid-cols-4 1500px:gap-[35px] mb-12 border-0 mt-8">
-              {courses &&
-                courses.map((item: any, index: number) => (
-                  <CourseCard item={item} key={index} />
-                ))}
-            </div>
-
-            {/* Bundles Section */}
+            {/* Bundles Section — shown first */}
             {bundlesData?.bundles?.length > 0 && (
-              <div className="mt-8 mb-16">
+              <div className="mb-12">
                 <div className="flex items-center gap-3 mb-6">
                   <h2 className="text-2xl font-bold text-black dark:text-white">
                     Course Bundles
@@ -98,6 +84,26 @@ const CoursesContent = (props: Props) => {
                 </div>
               </div>
             )}
+
+            {/* Courses Section */}
+            {bundlesData?.bundles?.length > 0 && (
+              <div className="flex items-center gap-3 mb-6">
+                <h2 className="text-2xl font-bold text-black dark:text-white">All Courses</h2>
+              </div>
+            )}
+            {
+                courses && courses.length === 0 && (
+                    <p className={`${styles.label} justify-center min-h-[50vh] flex items-center`}>
+                    {search ? "No courses found!" : "No courses found in this category. Please try another one!"}
+                  </p>
+                )
+            }
+            <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] 1500px:grid-cols-4 1500px:gap-[35px] mb-12 border-0 mt-8">
+              {courses &&
+                courses.map((item: any, index: number) => (
+                  <CourseCard item={item} key={index} />
+                ))}
+            </div>
           </div>
           <Footer />
         </>
